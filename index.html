@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Gold Country Events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf9f1; --bg2:#f7ecd9; --surface:#ffffff; --surface2:#fbf3e4;
+    --ink:#2b2015; --ink2:#57493a; --muted:#7d6c5a;
+    --line:#e7d9c3; --line2:#dcc9a6;
+    --accent:#9a6206; --accent-ink:#7c4d02; --accent-soft:#f6e3b8;
+    --gold:#c98f1b; --rust:#b5502a;
+    --chip-bg:#ffffff; --chip-on:#2b2015; --chip-on-ink:#fdf9f1;
+    --badge-bg:#2b2015; --badge-ink:#f9e7bd;
+    --shadow:0 1px 2px rgba(70,48,10,.06),0 10px 30px -14px rgba(70,48,10,.28);
+    --shadow-lg:0 24px 60px -18px rgba(43,32,21,.45);
+    --skel:#efe3cb; --skel2:#e6d5b2;
+    --focus:#b5502a;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191410; --bg2:#211a13; --surface:#251d15; --surface2:#2c2318;
+      --ink:#f4e9d7; --ink2:#d8c8ae; --muted:#a89477;
+      --line:#3d3122; --line2:#52432c;
+      --accent:#e3aa3e; --accent-ink:#f0bc55; --accent-soft:#3d2f16;
+      --gold:#e3aa3e; --rust:#e07a4e;
+      --chip-bg:#251d15; --chip-on:#e3aa3e; --chip-on-ink:#241a08;
+      --badge-bg:#f4e9d7; --badge-ink:#2b2015;
+      --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 30px -14px rgba(0,0,0,.6);
+      --shadow-lg:0 24px 60px -18px rgba(0,0,0,.75);
+      --skel:#2c2318; --skel2:#3a2d1d;
+      --focus:#e3aa3e;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  button,[role="button"],select,input{font:inherit}
+  button,select,input[type="search"]{min-height:44px}
+  a{color:var(--accent-ink)}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 72px}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;overflow:hidden;
+    background:linear-gradient(160deg,var(--bg2),var(--bg) 72%);
+    border-bottom:1px solid var(--line)}
+  .hero-inner{max-width:1180px;margin:0 auto;padding:44px 20px 30px}
+  .hero-rule{display:flex;align-items:center;gap:12px;color:var(--accent-ink);
+    font-size:12.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+  .hero-rule::after{content:"";height:1px;flex:1;background:var(--line2)}
+  h1{font-family:"Newsreader",Georgia,serif;font-weight:600;
+    font-size:clamp(42px,7vw,68px);line-height:1.02;letter-spacing:-.01em;margin:14px 0 10px}
+  h1 em{font-style:italic;color:var(--accent-ink)}
+  .hero-sub{font-size:clamp(16px,2.4vw,19px);color:var(--ink2);max-width:620px;margin:0}
+  .hero-credit{margin-top:10px;font-size:13.5px;color:var(--muted)}
+  .hero-credit a{font-weight:600}
+  .stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:10px 16px;box-shadow:var(--shadow);min-width:104px}
+  .stat b{display:block;font-family:"Newsreader",Georgia,serif;font-size:26px;line-height:1.05;font-weight:700}
+  .stat span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{position:sticky;top:0;z-index:40;background:var(--bg);
+    border-bottom:1px solid var(--line);padding:14px 0 12px;margin-bottom:6px}
+  .toolbar-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .search{flex:1 1 240px;position:relative}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);pointer-events:none}
+  .search input{width:100%;padding:10px 38px 10px 40px;border:1px solid var(--line2);border-radius:999px;
+    background:var(--surface);color:var(--ink);font-size:16px}
+  .search input::placeholder{color:var(--muted)}
+  .search input::-webkit-search-cancel-button{display:none}
+  .search .clear-q{position:absolute;right:4px;top:50%;transform:translateY(-50%);
+    width:36px;height:36px;min-height:36px;border:none;border-radius:50%;background:transparent;
+    color:var(--muted);font-size:18px;cursor:pointer;display:none;line-height:1}
+  .search.has-q .clear-q{display:block}
+  .hostsel{flex:0 1 230px;max-width:100%}
+  .hostsel select{width:100%;padding:10px 12px;border:1px solid var(--line2);border-radius:999px;
+    background:var(--surface);color:var(--ink);font-size:15px}
+  .viewtoggle{display:flex;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px;flex:none}
+  .viewtoggle button{border:none;background:transparent;color:var(--ink2);border-radius:999px;
+    padding:7px 16px;min-height:38px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:7px}
+  .viewtoggle button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  .viewtoggle svg{width:15px;height:15px}
+
+  .seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .seg button{border:1px solid var(--line2);background:var(--surface);color:var(--ink2);
+    border-radius:999px;padding:8px 15px;min-height:40px;font-weight:600;font-size:14px;cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  @media (prefers-color-scheme: dark){.seg button[aria-pressed="true"]{color:#241a08}}
+
+  .towns{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
+  .towns-label{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+  .chip{border:1px solid var(--line);background:var(--chip-bg);color:var(--ink2);
+    border-radius:999px;padding:7px 13px;min-height:38px;font-size:13.5px;font-weight:600;cursor:pointer}
+  .chip .n{color:var(--muted);font-weight:600;margin-left:4px;font-size:12.5px}
+  .chip[aria-pressed="true"]{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
+  .chip[aria-pressed="true"] .n{color:inherit;opacity:.65}
+  .clearall{border:none;background:none;color:var(--rust);font-weight:700;font-size:14px;
+    cursor:pointer;padding:8px 10px;min-height:40px;text-decoration:underline;text-underline-offset:3px}
+
+  .countline{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:20px 0 16px}
+  .countline .big{font-family:"Newsreader",Georgia,serif;font-size:22px;font-weight:600}
+  .countline .small{color:var(--muted);font-size:14px}
+
+  /* ---------- Cards (grid) ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;text-align:left;
+    padding:0;color:inherit;width:100%;transition:transform .18s ease,box-shadow .18s ease}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+  .card-media{position:relative;aspect-ratio:16/9;background:var(--surface2);overflow:hidden;flex:none}
+  .card-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-media .noimg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 14px,var(--accent-soft) 14px,var(--accent-soft) 15px);color:var(--muted)}
+  .card-media .noimg svg{width:34px;height:34px;opacity:.6}
+  .card-media .noimg span{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+  .datebadge{position:absolute;left:12px;bottom:12px;background:var(--badge-bg);color:var(--badge-ink);
+    border-radius:10px;padding:6px 11px 7px;text-align:center;line-height:1.1;box-shadow:var(--shadow)}
+  .datebadge .dow{display:block;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+  .datebadge .dnum{display:block;font-family:"Newsreader",Georgia,serif;font-size:21px;font-weight:700}
+  .reltag{position:absolute;top:12px;right:12px;background:var(--rust);color:#fff;font-size:12px;
+    font-weight:800;letter-spacing:.03em;border-radius:999px;padding:5px 11px;box-shadow:var(--shadow)}
+  .reltag.soon{background:var(--accent)}
+  .card-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .card h3{font-family:"Newsreader",Georgia,serif;font-size:21px;font-weight:600;line-height:1.18;margin:0}
+  .meta{display:flex;align-items:flex-start;gap:8px;color:var(--ink2);font-size:14px}
+  .meta svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--accent)}
+  .desc{color:var(--muted);font-size:14px;margin:2px 0 0;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .card-foot{margin-top:auto;padding-top:10px;display:flex;align-items:center;gap:8px}
+  .hostchip{font-size:12.5px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);
+    border-radius:999px;padding:4px 11px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .details-link{margin-left:auto;font-size:13.5px;font-weight:700;color:var(--accent-ink);flex:none}
+
+  /* ---------- List view ---------- */
+  .daygroup{margin-bottom:8px}
+  .dayhead{position:sticky;top:var(--stickytop,150px);z-index:5;background:var(--bg);
+    padding:12px 2px 8px;display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--line2)}
+  .dayhead .d{font-family:"Newsreader",Georgia,serif;font-size:20px;font-weight:700}
+  .dayhead .rel{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--rust)}
+  .row{display:flex;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);
+    border-top:none;padding:13px 16px;cursor:pointer;color:inherit;align-items:center}
+  .row:first-of-type{border-top:1px solid var(--line);border-radius:0}
+  .daygroup .row:last-child{border-radius:0 0 12px 12px}
+  .daygroup .row:first-of-type{border-radius:12px 12px 0 0}
+  .row:hover{background:var(--surface2)}
+  .row img,.row .rowph{width:64px;height:64px;flex:none;border-radius:10px;object-fit:cover;background:var(--surface2)}
+  .row .rowph{display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .row .rowph svg{width:24px;height:24px;opacity:.6}
+  .row-main{min-width:0;flex:1}
+  .row h3{font-size:16.5px;font-weight:700;margin:0 0 2px;line-height:1.25}
+  .row .rmeta{color:var(--muted);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .rtime{flex:none;text-align:right;font-weight:700;font-size:14px;color:var(--accent-ink);min-width:74px}
+  .row .rtime small{display:block;color:var(--muted);font-weight:600;font-size:12px}
+
+  /* ---------- States ---------- */
+  .skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+  .skel{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
+  .skel .a{aspect-ratio:16/9;background:var(--skel)}
+  .skel .b{height:20px;margin:16px 18px 8px;border-radius:6px;background:var(--skel)}
+  .skel .c{height:14px;margin:0 18px 18px;width:55%;border-radius:6px;background:var(--skel)}
+  .pulse{animation:pulse 1.3s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .state{background:var(--surface);border:1px dashed var(--line2);border-radius:16px;
+    padding:44px 24px;text-align:center;color:var(--ink2)}
+  .state h2{font-family:"Newsreader",Georgia,serif;font-size:26px;margin:0 0 8px;color:var(--ink)}
+  .state p{margin:0 auto 18px;max-width:420px}
+  .btn{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:11px 24px;
+    font-weight:700;cursor:pointer;font-size:15px}
+  @media (prefers-color-scheme: dark){.btn{color:#241a08}}
+  .btn.ghost{background:var(--surface);color:var(--accent-ink);border:1px solid var(--line2)}
+  .showmore{display:block;margin:28px auto 0}
+
+  footer{border-top:1px solid var(--line);margin-top:56px;padding-top:20px;color:var(--muted);font-size:13.5px;
+    display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
+
+  /* ---------- Modal ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(20,13,5,.55);z-index:80;display:none;
+    align-items:flex-end;justify-content:center;padding:0}
+  .scrim.open{display:flex}
+  .sheet{background:var(--surface);color:var(--ink);width:100%;max-width:640px;max-height:92vh;overflow:auto;
+    border-radius:20px 20px 0 0;box-shadow:var(--shadow-lg);animation:up .22s ease}
+  @keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+  @media (min-width:700px){.scrim{align-items:center;padding:24px}.sheet{border-radius:20px}}
+  .sheet-media{position:relative;aspect-ratio:16/8;background:var(--surface2)}
+  .sheet-media img{width:100%;height:100%;object-fit:cover;display:block}
+  .sheet-media .noimg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);
+    background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 14px,var(--accent-soft) 14px,var(--accent-soft) 15px)}
+  .sheet-media .noimg svg{width:44px;height:44px;opacity:.55}
+  .sheet-x{position:absolute;top:12px;right:12px;width:44px;height:44px;border:none;border-radius:50%;
+    background:rgba(20,13,5,.55);color:#fff;font-size:20px;cursor:pointer;line-height:1;z-index:2}
+  .sheet-body{padding:22px 24px 28px}
+  .sheet .rel{display:inline-block;background:var(--rust);color:#fff;font-size:12px;font-weight:800;
+    border-radius:999px;padding:4px 11px;margin-bottom:10px}
+  .sheet .rel.soon{background:var(--accent)}
+  .sheet h2{font-family:"Newsreader",Georgia,serif;font-size:31px;font-weight:600;line-height:1.12;margin:0 0 14px}
+  .facts{display:flex;flex-direction:column;gap:10px;margin:0 0 16px;padding:14px 16px;
+    background:var(--surface2);border:1px solid var(--line);border-radius:12px}
+  .fact{display:flex;gap:10px;font-size:15px;align-items:flex-start}
+  .fact svg{width:17px;height:17px;flex:none;margin-top:3px;color:var(--accent)}
+  .fact b{font-weight:700}
+  .fact a{font-weight:600}
+  .sheet .full{font-size:16px;color:var(--ink2);white-space:pre-wrap;margin:0 0 20px}
+  .sheet-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .sheet-actions .btn{text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+  @media (prefers-reduced-motion: reduce){
+    .card{transition:none}.sheet{animation:none}html{scroll-behavior:auto}.pulse{animation:none}
+  }
+  @media (max-width:560px){
+    .hero-inner{padding:32px 20px 24px}
+    .grid,.skel-grid{grid-template-columns:1fr}
+    .row .rtime{min-width:60px;font-size:13px}
+    .hostsel{flex:1 1 160px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-rule">Amador County · California Gold Country</div>
+    <h1>Gold Country <em>Events</em></h1>
+    <p class="hero-sub">Markets, music, wine weekends, and small-town gatherings across Fiddletown, Plymouth, Volcano, Sutter Creek, and the Shenandoah Valley — every published event, in one place.</p>
+    <p class="hero-credit">From the events database curated by <a href="https://davedellaquila.github.io/buddy-system/events-buddy/" target="_blank" rel="noopener">Events Buddy</a> — the same listings the Fiddletown Gazette and morning briefings draw from.</p>
+    <div class="stats" id="stats" aria-live="polite">
+      <div class="stat"><b>—</b><span>Published</span></div>
+      <div class="stat"><b>—</b><span>Upcoming</span></div>
+      <div class="stat"><b>—</b><span>Towns</span></div>
+      <div class="stat"><b>—</b><span>Hosts</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar" id="toolbar">
+    <div class="toolbar-row">
+      <div class="search" id="searchbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+        <input id="q" type="search" placeholder="Search events, places, or hosts…" aria-label="Search events" autocomplete="off">
+        <button class="clear-q" id="clearq" type="button" aria-label="Clear search">×</button>
+      </div>
+      <div class="hostsel">
+        <select id="host" aria-label="Filter by host"><option value="">All hosts</option></select>
+      </div>
+      <div class="viewtoggle" role="group" aria-label="View">
+        <button type="button" id="view-grid" aria-pressed="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+          Cards</button>
+        <button type="button" id="view-list" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="4" width="18" height="3.4" rx="1.7"/><rect x="3" y="10.3" width="18" height="3.4" rx="1.7"/><rect x="3" y="16.6" width="18" height="3.4" rx="1.7"/></svg>
+          List</button>
+      </div>
+    </div>
+    <div class="seg" id="when" role="group" aria-label="Filter by date">
+      <button type="button" data-when="upcoming" aria-pressed="true">Upcoming</button>
+      <button type="button" data-when="next7" aria-pressed="false">Next 7 days</button>
+      <button type="button" data-when="next30" aria-pressed="false">Next 30 days</button>
+      <button type="button" data-when="all" aria-pressed="false">All dates</button>
+      <button type="button" data-when="past" aria-pressed="false">Past events</button>
+    </div>
+    <div class="towns" id="towns"><span class="towns-label">Towns</span></div>
+  </div>
+
+  <div class="countline">
+    <span class="big" id="count-big">Loading the events database…</span>
+    <span class="small" id="count-small"></span>
+    <button class="clearall" id="clearall" type="button" hidden>Clear all filters</button>
+  </div>
+
+  <main id="results" aria-live="polite"></main>
+  <div id="more-wrap"></div>
+
+  <footer>
+    <span>Gold Country Events — a public, read-only view of the events database.</span>
+    <span>Listings curated by Events Buddy · Dates shown in Pacific Time</span>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var FEED_URL = 'https://ydftcebaftngcdjvxrgl.supabase.co/rest/v1/events'
+    + '?select=name,slug,start_date,start_time,end_date,end_time,location,host_org,website_url,image_url,short_description'
+    + '&status=eq.published&order=start_date.asc&limit=1000';
+  var ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkZnRjZWJhZnRuZ2NkanZ4cmdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1NDA5NDcsImV4cCI6MjA3NjExNjk0N30.8AlcsUMJSxBlua-ehaGLAn69bbORoMBdjM--MSxxXF0';
+
+  var KNOWN_TOWNS = ['Shenandoah Valley','Sutter Creek','Amador City','Pine Grove','Valley Springs','Angels Camp','Grass Valley','Mount Aukum','Mt Aukum','Fair Play','Fiddletown','Plymouth','Volcano','Jackson','Drytown','Ione','Sacramento','San Jose','Napa','Danville','Santa Cruz','Monterey','Morgan Hill','Stockton','Placerville','Auburn','Sonora','Murphys','Pleasanton'];
+
+  var PAGE = 60;
+  var state = { q:'', town:'', host:'', when:'upcoming', view:'grid', shown: PAGE };
+  var rows = [], towns = [], hosts = [], loaded = false;
+  var todayLA = laToday();
+
+  var $ = function(id){ return document.getElementById(id); };
+  var resultsEl = $('results'), moreWrap = $('more-wrap');
+
+  function laToday(){
+    try{
+      var parts = new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'numeric',day:'numeric'}).formatToParts(new Date());
+      var y,m,d;
+      parts.forEach(function(p){ if(p.type==='year')y=+p.value; if(p.type==='month')m=+p.value; if(p.type==='day')d=+p.value; });
+      return new Date(y, m-1, d);
+    }catch(e){ var n=new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+  }
+  function parseDate(s){ if(!s) return null; var p=s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+  function dayDiff(a,b){ return Math.round((a - b)/86400000); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+
+  var DOW=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var DOWS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var MON=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var MONS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function fmtDay(d){ return DOW[d.getDay()] + ', ' + MON[d.getMonth()] + ' ' + d.getDate() + (d.getFullYear()!==todayLA.getFullYear() ? ', ' + d.getFullYear() : ''); }
+  function fmtTime(t){
+    if(!t) return '';
+    var p=t.split(':'), h=+p[0], m=+p[1]||0;
+    var ap = h>=12 ? 'PM':'AM'; var hh = h%12; if(hh===0) hh=12;
+    return hh + (m? ':' + String(m).padStart(2,'0') : '') + ' ' + ap;
+  }
+  function timeRange(ev){
+    var a=fmtTime(ev.start_time), b=fmtTime(ev.end_time);
+    if(a && b) return a + ' – ' + b;
+    if(a) return a;
+    return 'Time TBA';
+  }
+  function dateRange(ev){
+    var s=fmtDay(ev.start), out=s;
+    if(ev.end && dayDiff(ev.end, ev.start)>0) out += ' – ' + fmtDay(ev.end);
+    var tr = timeRange(ev);
+    return out + (tr!=='Time TBA' ? ' · ' + tr : '');
+  }
+  function relTag(ev){
+    var diff = dayDiff(ev.start, todayLA);
+    if(diff < 0) return null;
+    if(diff === 0){
+      if(ev.start_time){ var h=+ev.start_time.split(':')[0]; if(h>=16) return {t:'Tonight', hot:true}; }
+      return {t:'Today', hot:true};
+    }
+    if(diff === 1) return {t:'Tomorrow', hot:true};
+    var dow = ev.start.getDay();
+    if(diff <= 7 && (dow===0 || dow===6)) return {t:'This weekend', hot:false};
+    if(diff <= 7) return {t:'This week', hot:false};
+    return null;
+  }
+  function townOf(loc){
+    if(!loc) return '';
+    for(var i=0;i<KNOWN_TOWNS.length;i++){
+      if(loc.indexOf(KNOWN_TOWNS[i]) !== -1) return KNOWN_TOWNS[i]==='Mt Aukum' ? 'Mount Aukum' : KNOWN_TOWNS[i];
+    }
+    var m = loc.match(/,\s*([A-Z][A-Za-z.' ]+?),\s*CA/);
+    return m ? m[1].trim() : '';
+  }
+  function normalize(r){
+    var start = parseDate(r.start_date), end = parseDate(r.end_date) || start;
+    return {
+      name:r.name||'Untitled event', slug:r.slug||'', start:start, end:end,
+      start_time:r.start_time||null, end_time:r.end_time||null,
+      location:r.location||'', host:(r.host_org||'').trim(),
+      website:r.website_url||'', image:r.image_url||'',
+      desc:r.short_description||'', town:townOf(r.location||'')
+    };
+  }
+  function isUpcoming(ev){ return ev.end && dayDiff(ev.end, todayLA) >= 0; }
+
+  function filtered(){
+    var q = state.q.trim().toLowerCase();
+    var out = rows.filter(function(ev){
+      if(state.when==='upcoming' && !isUpcoming(ev)) return false;
+      if(state.when==='past' && isUpcoming(ev)) return false;
+      if(state.when==='next7'){ var d=dayDiff(ev.start,todayLA); if(!(isUpcoming(ev) && d<=7)) return false; }
+      if(state.when==='next30'){ var d2=dayDiff(ev.start,todayLA); if(!(isUpcoming(ev) && d2<=30)) return false; }
+      if(state.town && ev.town !== state.town) return false;
+      if(state.host && ev.host !== state.host) return false;
+      if(q){
+        var hay = (ev.name+' '+ev.location+' '+ev.host+' '+ev.town).toLowerCase();
+        if(hay.indexOf(q)===-1) return false;
+      }
+      return true;
+    });
+    if(state.when==='past') out.sort(function(a,b){ return b.start - a.start; });
+    else out.sort(function(a,b){ return a.start - b.start; });
+    return out;
+  }
+  function anyFilter(){ return !!(state.q || state.town || state.host || state.when!=='upcoming'); }
+
+  var ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+  var ICON_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>';
+  var ICON_CLK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
+  var ICON_USR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-3.6 4.2-5.4 8-5.4s6.8 1.8 8 5.4"/></svg>';
+
+  function cardHTML(ev, i){
+    var rel = relTag(ev);
+    var media = ev.image
+      ? '<img src="'+esc(ev.image)+'" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="noimg" style="display:none">'+ICON_CAL+'<span>'+esc(ev.town||'Gold Country')+'</span></div>'
+      : '<div class="noimg">'+ICON_CAL+'<span>'+esc(ev.town||'Gold Country')+'</span></div>';
+    return '<button type="button" class="card" data-i="'+i+'" aria-label="'+esc(ev.name)+'">'
+      + '<span class="card-media">'+media
+      + '<span class="datebadge"><span class="dow">'+DOWS[ev.start.getDay()]+'</span><span class="dnum">'+ev.start.getDate()+'</span></span>'
+      + (rel ? '<span class="reltag'+(rel.hot?'':' soon')+'">'+esc(rel.t)+'</span>' : '')
+      + '</span>'
+      + '<span class="card-body"><h3>'+esc(ev.name)+'</h3>'
+      + '<span class="meta">'+ICON_CLK+'<span>'+esc(fmtDay(ev.start))+' · '+esc(timeRange(ev))+'</span></span>'
+      + (ev.location ? '<span class="meta">'+ICON_PIN+'<span>'+esc(ev.location)+'</span></span>' : '')
+      + (ev.desc ? '<span class="desc">'+esc(ev.desc)+'</span>' : '')
+      + '<span class="card-foot">'
+      + (ev.host ? '<span class="hostchip">'+esc(ev.host)+'</span>' : '<span></span>')
+      + '<span class="details-link">Details →</span></span>'
+      + '</span></button>';
+  }
+  function rowHTML(ev, i){
+    var thumb = ev.image ? '<img src="'+esc(ev.image)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">' : '<span class="rowph">'+ICON_CAL+'</span>';
+    var meta = [ev.location, ev.host].filter(Boolean).join(' · ');
+    return '<button type="button" class="row" data-i="'+i+'">'
+      + thumb
+      + '<span class="row-main"><h3>'+esc(ev.name)+'</h3><span class="rmeta">'+esc(meta)+'</span></span>'
+      + '<span class="rtime">'+esc(fmtTime(ev.start_time)||'All day')+(ev.end_time?'<small>to '+esc(fmtTime(ev.end_time))+'</small>':'')+'</span>'
+      + '</button>';
+  }
+
+  var currentList = [];
+  function render(){
+    if(!loaded) return;
+    var out = filtered();
+    currentList = out;
+    var upcomingTotal = rows.filter(isUpcoming).length;
+    $('count-big').textContent = 'Showing ' + out.length + ' of ' + rows.length + ' published events';
+    $('count-small').textContent = '(' + upcomingTotal + ' upcoming)';
+    $('clearall').hidden = !anyFilter();
+
+    if(!rows.length) return;
+    if(!out.length){
+      resultsEl.innerHTML = '<div class="state"><h2>Nothing matches those filters</h2>'
+        + '<p>Try a different search, town, or date range — or clear everything and browse the full calendar.</p>'
+        + '<button class="btn" id="state-clear" type="button">Clear all filters</button></div>';
+      moreWrap.innerHTML = '';
+      var b = $('state-clear'); if(b) b.addEventListener('click', clearAll);
+      return;
+    }
+    var slice = out.slice(0, state.shown);
+    if(state.view==='grid'){
+      resultsEl.innerHTML = '<div class="grid">' + slice.map(function(ev){ return cardHTML(ev, out.indexOf(ev)); }).join('') + '</div>';
+    } else {
+      var html = '', lastKey = '';
+      slice.forEach(function(ev){
+        var key = ev.start.toDateString();
+        if(key !== lastKey){
+          if(lastKey) html += '</div>';
+          var rel = relTag(ev);
+          html += '<section class="daygroup"><div class="dayhead"><span class="d">'+esc(fmtDay(ev.start))+'</span>'
+            + (rel ? '<span class="rel">'+esc(rel.t)+'</span>' : '') + '</div>';
+          lastKey = key;
+        }
+        html += rowHTML(ev, out.indexOf(ev));
+      });
+      if(lastKey) html += '</section>';
+      resultsEl.innerHTML = html;
+    }
+    if(out.length > slice.length){
+      moreWrap.innerHTML = '<button class="btn ghost showmore" id="more" type="button">Show more events (' + (out.length - slice.length) + ' remaining)</button>';
+      $('more').addEventListener('click', function(){ state.shown += PAGE; render(); });
+    } else moreWrap.innerHTML = '';
+
+    Array.prototype.forEach.call(resultsEl.querySelectorAll('[data-i]'), function(el){
+      el.addEventListener('click', function(){ openDetail(currentList[+el.getAttribute('data-i')]); });
+    });
+    syncStickyTop();
+  }
+
+  function syncStickyTop(){
+    var tb = $('toolbar');
+    if(tb) document.documentElement.style.setProperty('--stickytop', tb.offsetHeight + 'px');
+  }
+
+  /* ---------- Detail sheet ---------- */
+  var scrim = $('scrim'), sheet = $('sheet'), lastFocus = null;
+  function openDetail(ev){
+    if(!ev) return;
+    lastFocus = document.activeElement;
+    var rel = relTag(ev);
+    var media = ev.image
+      ? '<img src="'+esc(ev.image)+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="noimg" style="display:none">'+ICON_CAL+'</div>'
+      : '<div class="noimg">'+ICON_CAL+'</div>';
+    var maps = ev.location ? 'https://maps.apple.com/?q=' + encodeURIComponent(ev.location) : '';
+    sheet.innerHTML =
+      '<div class="sheet-media">' + media
+      + '<button class="sheet-x" id="sheet-x" type="button" aria-label="Close details">×</button></div>'
+      + '<div class="sheet-body">'
+      + (rel ? '<span class="rel'+(rel.hot?'':' soon')+'">'+esc(rel.t)+'</span>' : '')
+      + '<h2 id="sheet-title">'+esc(ev.name)+'</h2>'
+      + '<div class="facts">'
+      + '<div class="fact">'+ICON_CAL+'<span><b>'+esc(dateRange(ev))+'</b></span></div>'
+      + (ev.location ? '<div class="fact">'+ICON_PIN+'<span>'+esc(ev.location)+' &nbsp;<a href="'+maps+'" target="_blank" rel="noopener">Open in Apple Maps</a></span></div>' : '')
+      + (ev.host ? '<div class="fact">'+ICON_USR+'<span>Hosted by <b>'+esc(ev.host)+'</b></span></div>' : '')
+      + '</div>'
+      + (ev.desc ? '<p class="full">'+esc(ev.desc)+'</p>' : '')
+      + '<div class="sheet-actions">'
+      + (ev.website ? '<a class="btn" href="'+esc(ev.website)+'" target="_blank" rel="noopener">Visit event site</a>' : '')
+      + (ev.location ? '<a class="btn ghost" href="'+maps+'" target="_blank" rel="noopener">Directions</a>' : '')
+      + '</div></div>';
+    scrim.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    $('sheet-x').addEventListener('click', closeDetail);
+    $('sheet-x').focus();
+  }
+  function closeDetail(){
+    scrim.classList.remove('open');
+    document.body.style.overflow = '';
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  scrim.addEventListener('click', function(e){ if(e.target===scrim) closeDetail(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && scrim.classList.contains('open')) closeDetail(); });
+
+  /* ---------- Filters UI ---------- */
+  function buildTowns(){
+    var counts = {};
+    rows.forEach(function(ev){ if(ev.town) counts[ev.town]=(counts[ev.town]||0)+1; });
+    towns = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a] || a.localeCompare(b); });
+    var el = $('towns');
+    el.innerHTML = '<span class="towns-label">Towns</span>';
+    var all = document.createElement('button');
+    all.type='button'; all.className='chip'; all.textContent='All towns';
+    all.setAttribute('aria-pressed', state.town==='' ? 'true':'false');
+    all.addEventListener('click', function(){ state.town=''; state.shown=PAGE; buildTowns(); render(); });
+    el.appendChild(all);
+    towns.forEach(function(t){
+      var c = document.createElement('button');
+      c.type='button'; c.className='chip';
+      c.innerHTML = esc(t) + '<span class="n">'+counts[t]+'</span>';
+      c.setAttribute('aria-pressed', state.town===t ? 'true':'false');
+      c.addEventListener('click', function(){
+        state.town = state.town===t ? '' : t; state.shown=PAGE; buildTowns(); render();
+      });
+      el.appendChild(c);
+    });
+    var st = document.querySelectorAll('#stats .stat b');
+    if(st[2]) st[2].textContent = towns.length;
+  }
+  function buildHosts(){
+    var counts = {};
+    rows.forEach(function(ev){ if(ev.host) counts[ev.host]=(counts[ev.host]||0)+1; });
+    hosts = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a] || a.localeCompare(b); });
+    var sel = $('host');
+    sel.innerHTML = '<option value="">All hosts (' + hosts.length + ')</option>';
+    hosts.forEach(function(h){
+      var o=document.createElement('option'); o.value=h; o.textContent = h + ' (' + counts[h] + ')'; sel.appendChild(o);
+    });
+    var st = document.querySelectorAll('#stats .stat b');
+    if(st[3]) st[3].textContent = hosts.length;
+  }
+  function clearAll(){
+    state.q=''; state.town=''; state.host=''; state.when='upcoming'; state.shown=PAGE;
+    $('q').value=''; $('host').value='';
+    $('searchbox').classList.remove('has-q');
+    Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-when')==='upcoming' ? 'true':'false');
+    });
+    buildTowns(); render();
+  }
+  $('clearall').addEventListener('click', clearAll);
+
+  var qTimer=null;
+  $('q').addEventListener('input', function(){
+    $('searchbox').classList.toggle('has-q', !!this.value);
+    var v=this.value;
+    clearTimeout(qTimer);
+    qTimer=setTimeout(function(){ state.q=v; state.shown=PAGE; render(); }, 120);
+  });
+  $('clearq').addEventListener('click', function(){
+    $('q').value=''; $('searchbox').classList.remove('has-q'); state.q=''; state.shown=PAGE; render(); $('q').focus();
+  });
+  $('host').addEventListener('change', function(){ state.host=this.value; state.shown=PAGE; render(); });
+  Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(b){
+    b.addEventListener('click', function(){
+      state.when=b.getAttribute('data-when'); state.shown=PAGE;
+      Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(x){ x.setAttribute('aria-pressed','false'); });
+      b.setAttribute('aria-pressed','true'); render();
+    });
+  });
+  function setView(v){
+    state.view=v;
+    $('view-grid').setAttribute('aria-pressed', v==='grid'?'true':'false');
+    $('view-list').setAttribute('aria-pressed', v==='list'?'true':'false');
+    render();
+  }
+  $('view-grid').addEventListener('click', function(){ setView('grid'); });
+  $('view-list').addEventListener('click', function(){ setView('list'); });
+  window.addEventListener('resize', syncStickyTop);
+
+  /* ---------- Load ---------- */
+  function skeleton(){
+    var s='';
+    for(var i=0;i<6;i++) s += '<div class="skel pulse"><div class="a"></div><div class="b"></div><div class="c"></div></div>';
+    resultsEl.innerHTML = '<div class="skel-grid" aria-label="Loading events">'+s+'</div>';
+  }
+  function load(){
+    skeleton();
+    $('count-big').textContent = 'Loading the events database…';
+    $('count-small').textContent = '';
+    fetch(FEED_URL, { headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY } })
+      .then(function(res){ if(!res.ok) throw new Error('feed ' + res.status); return res.json(); })
+      .then(function(data){
+        rows = data.map(normalize).filter(function(ev){ return ev.start; });
+        loaded = true;
+        var st = document.querySelectorAll('#stats .stat b');
+        st[0].textContent = rows.length;
+        st[1].textContent = rows.filter(isUpcoming).length;
+        buildTowns(); buildHosts(); render();
+      })
+      .catch(function(){
+        resultsEl.innerHTML = '<div class="state"><h2>Couldn’t reach the events database</h2>'
+          + '<p>The live listings didn’t load just now. Check your connection and try again — nothing here is cached or made up.</p>'
+          + '<button class="btn" id="retry" type="button">Try again</button></div>';
+        $('count-big').textContent = 'Events unavailable right now';
+        var r=$('retry'); if(r) r.addEventListener('click', load);
+      });
+  }
+  load();
+  syncStickyTop();
+})();
+</script>
+</body>
+</html>
