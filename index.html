@@ -160,6 +160,10 @@
   .hostchip{font-size:12.5px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);
     border-radius:999px;padding:4px 11px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .details-link{margin-left:auto;font-size:13.5px;font-weight:700;color:var(--accent-ink);flex:none}
+  .src-link{margin-left:auto;font-size:13.5px;font-weight:700;color:var(--accent-ink);text-decoration:underline;text-underline-offset:2px;cursor:pointer;flex:none}
+  .src-link:hover{color:var(--ink)}
+  .src-link + .details-link{margin-left:12px}
+  .row .src-link{margin-left:0;font-size:12.5px}
 
   /* ---------- List view ---------- */
   .daygroup{margin-bottom:8px}
@@ -448,6 +452,7 @@
       + (ev.desc ? '<span class="desc">'+esc(ev.desc)+'</span>' : '')
       + '<span class="card-foot">'
       + (ev.host ? '<span class="hostchip">'+esc(ev.host)+'</span>' : '<span></span>')
+      + (ev.website ? '<span class="src-link" data-url="'+esc(ev.website)+'" title="Open the source page for this event">More info ↗</span>' : '')
       + '<span class="details-link">Details →</span></span>'
       + '</span></button>';
   }
@@ -456,7 +461,9 @@
     var meta = [ev.location, ev.host].filter(Boolean).join(' · ');
     return '<button type="button" class="row" data-i="'+i+'">'
       + thumb
-      + '<span class="row-main"><h3>'+esc(ev.name)+'</h3><span class="rmeta">'+esc(meta)+'</span></span>'
+      + '<span class="row-main"><h3>'+esc(ev.name)+'</h3><span class="rmeta">'+esc(meta)+'</span>'
+      + (ev.website ? '<span class="src-link" data-url="'+esc(ev.website)+'" title="Open the source page for this event">More info ↗</span>' : '')
+      + '</span>'
       + '<span class="rtime">'+esc(fmtTime(ev.start_time)||'All day')+(ev.end_time?'<small>to '+esc(fmtTime(ev.end_time))+'</small>':'')+'</span>'
       + '</button>';
   }
@@ -507,6 +514,11 @@
 
     Array.prototype.forEach.call(resultsEl.querySelectorAll('[data-i]'), function(el){
       el.addEventListener('click', function(){ openDetail(currentList[+el.getAttribute('data-i')]); });
+      var sl = el.querySelector('.src-link');
+      if(sl) sl.addEventListener('click', function(e){
+        e.stopPropagation();
+        window.open(sl.getAttribute('data-url'), '_blank', 'noopener');
+      });
     });
     syncStickyTop();
   }
