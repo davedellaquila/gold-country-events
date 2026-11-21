@@ -75,9 +75,9 @@
   }
   @keyframes facetPulse{
     0%,100%{box-shadow:0 0 0 0 rgba(0,0,0,0)}
-    50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent-ink) 45%,transparent)}
+    50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--accent-ink) 55%,transparent)}
   }
-  .pulse-hit{animation:facetPulse .7s ease-in-out 3;border-radius:10px}
+  .pulse-hit{animation:facetPulse .9s ease-in-out 4;border-radius:10px}
   @media (prefers-reduced-motion: no-preference){
     .stat{animation:statPulse 3s ease-in-out infinite}
   }
@@ -655,12 +655,13 @@
     scrollToTools();
     var chip = document.querySelector('#towns .chip');
     if(chip) chip.focus();
-    pulseHit($('towns'));
+    setTimeout(function(){ pulseHit($('towns')); }, 300);
   });
   if(statEls[3]) statEls[3].addEventListener('click', function(){
     scrollToTools();
     var hs = $('host'); if(hs) hs.focus();
-    pulseHit($('host'));
+    var wrap = hs ? (hs.closest('.hostsel') || hs) : null;
+    setTimeout(function(){ pulseHit(wrap); }, 300);
   });
 
   function setView(v){
