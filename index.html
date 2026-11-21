@@ -65,7 +65,10 @@
   .hero-credit a{font-weight:600}
   .stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
   .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;
-    padding:10px 16px;box-shadow:var(--shadow);min-width:104px}
+    padding:10px 16px;box-shadow:var(--shadow);min-width:104px;cursor:pointer;
+    font:inherit;color:inherit;text-align:left;transition:border-color .15s ease,transform .15s ease}
+  .stat:hover{border-color:var(--accent-ink);transform:translateY(-1px)}
+  .stat:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
   .stat b{display:block;font-family:"Newsreader",Georgia,serif;font-size:26px;line-height:1.05;font-weight:700}
   .stat span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
@@ -233,10 +236,10 @@
     <p class="hero-sub">Markets, music, wine weekends, and small-town gatherings across Fiddletown, Plymouth, Volcano, Sutter Creek, and the Shenandoah Valley — every published event, in one place.</p>
     <p class="hero-credit">From the events database curated by <a href="https://davedellaquila.github.io/buddy-system/events-buddy/" target="_blank" rel="noopener">Events Buddy</a> — the same listings the Fiddletown Gazette and morning briefings draw from.</p>
     <div class="stats" id="stats" aria-live="polite">
-      <div class="stat"><b>—</b><span>Published</span></div>
-      <div class="stat"><b>—</b><span>Upcoming</span></div>
-      <div class="stat"><b>—</b><span>Towns</span></div>
-      <div class="stat"><b>—</b><span>Hosts</span></div>
+      <button type="button" class="stat" id="stat-published"><b>—</b><span>Published</span></button>
+      <button type="button" class="stat" id="stat-upcoming"><b>—</b><span>Upcoming</span></button>
+      <button type="button" class="stat" id="stat-towns"><b>—</b><span>Towns</span></button>
+      <button type="button" class="stat" id="stat-hosts"><b>—</b><span>Hosts</span></button>
     </div>
   </div>
 </header>
@@ -607,6 +610,31 @@
       b.setAttribute('aria-pressed','true'); render();
     });
   });
+  /* ---------- Stat cards (Dave, Nov 21) ---------- */
+  function setWhen(w){
+    state.when = w; state.shown = PAGE;
+    Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(x){
+      x.setAttribute('aria-pressed', x.getAttribute('data-when')===w ? 'true' : 'false');
+    });
+    render();
+  }
+  function scrollToTools(){
+    var tb = $('toolbar');
+    if(tb) tb.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  var statEls = document.querySelectorAll('#stats .stat');
+  if(statEls[0]) statEls[0].addEventListener('click', function(){ setWhen('all'); scrollToTools(); });
+  if(statEls[1]) statEls[1].addEventListener('click', function(){ setWhen('upcoming'); scrollToTools(); });
+  if(statEls[2]) statEls[2].addEventListener('click', function(){
+    scrollToTools();
+    var chip = document.querySelector('#towns .chip');
+    if(chip) chip.focus();
+  });
+  if(statEls[3]) statEls[3].addEventListener('click', function(){
+    scrollToTools();
+    var hs = $('host'); if(hs) hs.focus();
+  });
+
   function setView(v){
     state.view=v;
     $('view-grid').setAttribute('aria-pressed', v==='grid'?'true':'false');
