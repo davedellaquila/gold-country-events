@@ -376,22 +376,32 @@
     };
   }
   function isUpcoming(ev){ return ev.end && dayDiff(ev.end, todayLA) >= 0; }
-
-  function filtered(){
+  function passesWhen(ev){
+    if(state.when==='upcoming') return isUpcoming(ev);
+    if(state.when==='past') return !isUpcoming(ev);
+    if(state.when==='next7') return isUpcoming(ev) && dayDiff(ev.start, todayLA) <= 7;
+    if(state.when==='next30') return isUpcoming(ev) && dayDiff(ev.start, todayLA) <= 30;
+    return true;
+  }
+  /* Rows passing the current filters; `except` names one facet (town/host)
+     whose own selection is ignored, so facet counts stay meaningful. */
+  function facetRows(except){
     var q = state.q.trim().toLowerCase();
-    var out = rows.filter(function(ev){
-      if(state.when==='upcoming' && !isUpcoming(ev)) return false;
-      if(state.when==='past' && isUpcoming(ev)) return false;
-      if(state.when==='next7'){ var d=dayDiff(ev.start,todayLA); if(!(isUpcoming(ev) && d<=7)) return false; }
-      if(state.when==='next30'){ var d2=dayDiff(ev.start,todayLA); if(!(isUpcoming(ev) && d2<=30)) return false; }
-      if(state.town && ev.town !== state.town) return false;
-      if(state.host && ev.host !== state.host) return false;
+    return rows.filter(function(ev){
+      if(!passesWhen(ev)) return false;
+      if(except!=='town' && state.town && ev.town !== state.town) return false;
+      if(except!=='host' && state.host && ev.host !== state.host) return false;
       if(q){
         var hay = (ev.name+' '+ev.location+' '+ev.host+' '+ev.town).toLowerCase();
         if(hay.indexOf(q)===-1) return false;
       }
       return true;
     });
+  }
+
+
+  function filtered(){
+    var out = facetRows(null);
     if(state.when==='past') out.sort(function(a,b){ return b.start - a.start; });
     else out.sort(function(a,b){ return a.start - b.start; });
     return out;
@@ -435,6 +445,7 @@
   var currentList = [];
   function render(){
     if(!loaded) return;
+    buildTowns(); buildHosts();
     var out = filtered();
     currentList = out;
     var upcomingTotal = rows.filter(isUpcoming).length;
@@ -527,9 +538,11 @@
 
   /* ---------- Filters UI ---------- */
   function buildTowns(){
+    var allCounts = {};
+    rows.forEach(function(ev){ if(ev.town) allCounts[ev.town]=(allCounts[ev.town]||0)+1; });
+    towns = Object.keys(allCounts).sort(function(a,b){ return allCounts[b]-allCounts[a] || a.localeCompare(b); });
     var counts = {};
-    rows.forEach(function(ev){ if(ev.town) counts[ev.town]=(counts[ev.town]||0)+1; });
-    towns = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a] || a.localeCompare(b); });
+    facetRows('town').forEach(function(ev){ if(ev.town) counts[ev.town]=(counts[ev.town]||0)+1; });
     var el = $('towns');
     el.innerHTML = '<span class="towns-label">Towns</span>';
     var all = document.createElement('button');
@@ -540,7 +553,7 @@
     towns.forEach(function(t){
       var c = document.createElement('button');
       c.type='button'; c.className='chip';
-      c.innerHTML = esc(t) + '<span class="n">'+counts[t]+'</span>';
+      c.innerHTML = esc(t) + (counts[t] ? '<span class="n">'+counts[t]+'</span>' : '');
       c.setAttribute('aria-pressed', state.town===t ? 'true':'false');
       c.addEventListener('click', function(){
         state.town = state.town===t ? '' : t; state.shown=PAGE; buildTowns(); render();
@@ -551,14 +564,17 @@
     if(st[2]) st[2].textContent = towns.length;
   }
   function buildHosts(){
+    var allCounts = {};
+    rows.forEach(function(ev){ if(ev.host) allCounts[ev.host]=(allCounts[ev.host]||0)+1; });
+    hosts = Object.keys(allCounts).sort(function(a,b){ return allCounts[b]-allCounts[a] || a.localeCompare(b); });
     var counts = {};
-    rows.forEach(function(ev){ if(ev.host) counts[ev.host]=(counts[ev.host]||0)+1; });
-    hosts = Object.keys(counts).sort(function(a,b){ return counts[b]-counts[a] || a.localeCompare(b); });
+    facetRows('host').forEach(function(ev){ if(ev.host) counts[ev.host]=(counts[ev.host]||0)+1; });
     var sel = $('host');
     sel.innerHTML = '<option value="">All hosts (' + hosts.length + ')</option>';
     hosts.forEach(function(h){
-      var o=document.createElement('option'); o.value=h; o.textContent = h + ' (' + counts[h] + ')'; sel.appendChild(o);
+      var o=document.createElement('option'); o.value=h; o.textContent = h + (counts[h] ? ' (' + counts[h] + ')' : ''); sel.appendChild(o);
     });
+    sel.value = state.host;
     var st = document.querySelectorAll('#stats .stat b');
     if(st[3]) st[3].textContent = hosts.length;
   }
