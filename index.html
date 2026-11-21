@@ -69,6 +69,22 @@
     font:inherit;color:inherit;text-align:left;transition:border-color .15s ease,transform .15s ease}
   .stat:hover{border-color:var(--accent-ink);transform:translateY(-1px)}
   .stat:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+  @keyframes statPulse{
+    0%,100%{box-shadow:var(--shadow),0 0 0 0 rgba(0,0,0,0);transform:scale(1)}
+    50%{box-shadow:var(--shadow),0 0 18px 3px color-mix(in srgb,var(--accent-ink) 38%,transparent);transform:scale(1.02)}
+  }
+  @keyframes facetPulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(0,0,0,0)}
+    50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent-ink) 45%,transparent)}
+  }
+  .pulse-hit{animation:facetPulse .7s ease-in-out 3;border-radius:10px}
+  @media (prefers-reduced-motion: no-preference){
+    .stat{animation:statPulse 3s ease-in-out infinite}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .stat{animation:none}
+    .pulse-hit{animation:none}
+  }
   .stat b{display:block;font-family:"Newsreader",Georgia,serif;font-size:26px;line-height:1.05;font-weight:700}
   .stat span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
@@ -622,6 +638,16 @@
     var tb = $('toolbar');
     if(tb) tb.scrollIntoView({ behavior:'smooth', block:'start' });
   }
+  function pulseHit(el){
+    if(!el) return;
+    el.classList.remove('pulse-hit');
+    void el.offsetWidth;
+    el.classList.add('pulse-hit');
+    el.addEventListener('animationend', function h(){
+      el.classList.remove('pulse-hit');
+      el.removeEventListener('animationend', h);
+    });
+  }
   var statEls = document.querySelectorAll('#stats .stat');
   if(statEls[0]) statEls[0].addEventListener('click', function(){ setWhen('all'); scrollToTools(); });
   if(statEls[1]) statEls[1].addEventListener('click', function(){ setWhen('upcoming'); scrollToTools(); });
@@ -629,10 +655,12 @@
     scrollToTools();
     var chip = document.querySelector('#towns .chip');
     if(chip) chip.focus();
+    pulseHit($('towns'));
   });
   if(statEls[3]) statEls[3].addEventListener('click', function(){
     scrollToTools();
     var hs = $('host'); if(hs) hs.focus();
+    pulseHit($('host'));
   });
 
   function setView(v){
