@@ -164,6 +164,10 @@
   .src-link:hover{color:var(--ink)}
   .src-link + .details-link{margin-left:12px}
   .row .src-link{margin-left:0;font-size:12.5px}
+  .hostchip{cursor:pointer}
+  .hostchip:hover{text-decoration:underline;text-underline-offset:2px}
+  .hostlink{font-weight:700;color:var(--accent-ink);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+  .hostlink:hover{color:var(--ink)}
 
   /* ---------- List view ---------- */
   .daygroup{margin-bottom:8px}
@@ -456,17 +460,17 @@
       + (ev.location ? '<span class="meta">'+ICON_PIN+'<span>'+esc(ev.location)+'</span></span>' : '')
       + (ev.desc ? '<span class="desc">'+esc(ev.desc)+'</span>' : '')
       + '<span class="card-foot">'
-      + (ev.host ? '<span class="hostchip">'+esc(ev.host)+'</span>' : '<span></span>')
+      + (ev.host ? '<span class="hostchip" data-host="'+esc(ev.host)+'" title="See all events from this host">'+esc(ev.host)+'</span>' : '<span></span>')
       + (ev.website ? '<span class="src-link" data-url="'+esc(ev.website)+'" title="Open the source page for this event">More info ↗</span>' : '')
       + '<span class="details-link">Details →</span></span>'
       + '</span></button>';
   }
   function rowHTML(ev, i){
     var thumb = ev.image ? '<img src="'+esc(ev.image)+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">' : '<span class="rowph">'+ICON_CAL+'</span>';
-    var meta = [ev.location, ev.host].filter(Boolean).join(' · ');
+    var meta = esc(ev.location || '') + (ev.host ? (ev.location ? ' · ' : '') + '<span class="hostlink" data-host="'+esc(ev.host)+'" title="See all events from this host">'+esc(ev.host)+'</span>' : '');
     return '<button type="button" class="row" data-i="'+i+'">'
       + thumb
-      + '<span class="row-main"><h3>'+esc(ev.name)+'</h3><span class="rmeta">'+esc(meta)+'</span>'
+      + '<span class="row-main"><h3>'+esc(ev.name)+'</h3><span class="rmeta">'+meta+'</span>'
       + (ev.website ? '<span class="src-link" data-url="'+esc(ev.website)+'" title="Open the source page for this event">More info ↗</span>' : '')
       + '</span>'
       + '<span class="rtime">'+esc(fmtTime(ev.start_time)||'All day')+(ev.end_time?'<small>to '+esc(fmtTime(ev.end_time))+'</small>':'')+'</span>'
@@ -523,6 +527,11 @@
       if(sl) sl.addEventListener('click', function(e){
         e.stopPropagation();
         window.open(sl.getAttribute('data-url'), '_blank', 'noopener');
+      });
+      var hc = el.querySelector('.hostchip, .hostlink');
+      if(hc) hc.addEventListener('click', function(e){
+        e.stopPropagation();
+        setHost(hc.getAttribute('data-host'));
       });
     });
     syncStickyTop();
@@ -649,6 +658,12 @@
     Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(x){
       x.setAttribute('aria-pressed', x.getAttribute('data-when')===w ? 'true' : 'false');
     });
+    render();
+  }
+  function setHost(h){
+    state.host = h || '';
+    state.shown = PAGE;
+    var sel = $('host'); if(sel) sel.value = state.host;
     render();
   }
   function scrollToTools(){
