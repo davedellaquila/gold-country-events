@@ -69,6 +69,8 @@
   .hero-sub{font-size:clamp(16px,2.4vw,19px);color:var(--ink2);max-width:620px;margin:0}
   .hero-credit{margin-top:10px;font-size:13.5px;color:var(--muted)}
   .hero-credit a{font-weight:600}
+  .hero-nav{margin-top:12px;font-size:14.5px;color:var(--ink2)}
+  .hero-nav a{font-weight:700}
   .stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
   .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;
     padding:10px 16px;box-shadow:var(--shadow);min-width:104px;cursor:pointer;
@@ -294,6 +296,7 @@
     <h1><img class="hero-icon" src="favicon-192.png" alt="" aria-hidden="true">Gold Country <em>Events</em></h1>
     <p class="hero-sub">Markets, music, wine weekends, and small-town gatherings across Fiddletown, Plymouth, Volcano, Sutter Creek, and the Shenandoah Valley — every published event, in one place.</p>
     <p class="hero-credit">From the events database curated by <a href="https://davedellaquila.github.io/buddy-system/events-buddy/" target="_blank" rel="noopener">Events Buddy</a> — the same listings the Fiddletown Gazette and morning briefings draw from.</p>
+    <p class="hero-nav">Or browse the places themselves — every marker, winery, and hall in the database: <a href="locations.html">Gold Country Locations →</a></p>
     <div class="stats" id="stats" aria-live="polite">
       <button type="button" class="stat" id="stat-published"><b>—</b><span>Published</span></button>
       <button type="button" class="stat" id="stat-upcoming"><b>—</b><span>Upcoming</span></button>
@@ -877,6 +880,11 @@
         var r=$('retry'); if(r) r.addEventListener('click', load);
       });
   }
+  /* Deep link: ?q= pre-fills the search (the locations browser links here) */
+  try{
+    var dq = new URLSearchParams(window.location.search).get('q');
+    if(dq){ $('q').value = dq; state.q = dq; $('searchbox').classList.add('has-q'); }
+  }catch(e){}
   load();
   syncStickyTop();
 })();
