@@ -438,10 +438,31 @@
   }
 
 
+  /* Holiday events (Dave, Nov 22, 2026): within each day, holiday events
+     list first, then everything by start time. Curatorial matcher on the
+     name - the Christmas-season shows and observances (Tiny Tim, the
+     Farce, Festival of Trees and kin). Untimed events close out their
+     subgroup. */
+  var HOLIDAY_RE = /christmas|holiday|santa|tiny tim|farce day|festival of trees|tunnel of lights|light show|polar express|magic train|carols|plaid friday|skating rink|giving tuesday|thanksgiving|black friday|turkey trot|wreath/i;
+  function isHoliday(ev){ return HOLIDAY_RE.test(ev.name || ''); }
+  function startMinutes(ev){
+    if(!ev.start_time) return null;
+    var p = String(ev.start_time).split(':');
+    return (+p[0]) * 60 + (+p[1] || 0);
+  }
+  function dayOrder(a, b){
+    var ha = isHoliday(a) ? 0 : 1, hb = isHoliday(b) ? 0 : 1;
+    if(ha !== hb) return ha - hb;
+    var ta = startMinutes(a), tb = startMinutes(b);
+    if(ta === null && tb === null) return 0;
+    if(ta === null) return 1;
+    if(tb === null) return -1;
+    return ta - tb;
+  }
   function filtered(){
     var out = facetRows(null);
-    if(state.when==='past') out.sort(function(a,b){ return b.start - a.start; });
-    else out.sort(function(a,b){ return a.start - b.start; });
+    if(state.when==='past') out.sort(function(a,b){ return (b.start - a.start) || dayOrder(a, b); });
+    else out.sort(function(a,b){ return (a.start - b.start) || dayOrder(a, b); });
     return out;
   }
   function anyFilter(){ return !!(state.q || state.town || state.host || state.when!=='upcoming'); }
