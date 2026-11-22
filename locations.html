@@ -159,6 +159,7 @@ a[href^="tel:"]{color:inherit;text-decoration:underline;text-decoration-thicknes
         <button class="copy-btn" id="detail-copy" type="button">🔗 <span>Copy link</span></button>
         <a class="details-btn hidden" id="detail-dir" target="_blank" rel="noopener">Directions →</a>
         <a class="details-btn hidden" id="detail-web" target="_blank" rel="noopener">Visit website →</a>
+        <a class="details-btn hidden" id="detail-burger" target="_blank" rel="noopener">🍔 The burger story →</a>
       </div>
       <div class="detail-events" id="detail-events" hidden>
         <h2>Upcoming events here</h2>
@@ -409,6 +410,8 @@ function fmtTime(t){
   return hh+(mm!=='00'?':'+mm:'')+' '+ap;
 }
 function infoRow(label, valueHTML){ return '<div class="info-row"><span class="info-label">'+label+'</span><span class="info-value">'+valueHTML+'</span></div>'; }
+var BURGER_GUIDE = {"ikedas": "ikeda-s-california-country-market", "friar-tucks": "friar-tuck-s-now-the-sherwood", "wise-villa-winery": "wise-villa-winery-and-restaurant", "old-town-grill": "old-town-grill", "shoestring": "shoestring", "88-giant-burgers-to-go": "88-giant-burgers-to-go", "kennedys-pioneer-burger": "kennedy-s-pioneer-burger", "mel-and-fayes-diner": "mel-and-faye-s-diner", "sizemores-country-store": "sizemore-country-store", "cavanas-pub-and-grub": "cavana-s-pub-and-grub", "marlene-and-glens-diner": "marlene-and-glen-s-diner-the-dead-fly-diner", "helwig-winery": "the-kitchen-at-helwig-winery", "villa-toscano-winery-bistro": "villa-toscano-winery-the-bistro", "the-end-of-nowhere": "the-end-of-nowhere", "websters-country-burger-drive-in": "webster-s-country-burger-drive-in", "frosty": "frosty-angels-camp", "ironstone-vineyards": "gold-leaf-bistro-ironstone-vineyards", "diamondback-grill": "diamondback-grill", "jamestown-frosty": "jamestown-frosty", "lake-alpine-lodge": "lake-alpine-lodge", "walker-burger": "walker-burger"};
+var BURGER_BASE = 'https://davedellaquila.github.io/burgers-in-the-gold-country/';
 function renderDetailEvents(slug){
   var evs=evByLoc[slug]||[];
   var box=$('detail-events'), listEl=$('detail-events-list');
@@ -456,6 +459,8 @@ function showDetail(slug){
   var dir=$('detail-dir'); dir.href=mapsURL(r); dir.classList.remove('hidden');
   var web=$('detail-web');
   if(r.website_url){ web.href=r.website_url; web.classList.remove('hidden'); } else web.classList.add('hidden');
+  var bg=$('detail-burger');
+  if(BURGER_GUIDE[slug]){ bg.href=BURGER_BASE+'?place='+encodeURIComponent(BURGER_GUIDE[slug])+'#/place/'+encodeURIComponent(BURGER_GUIDE[slug]); bg.classList.remove('hidden'); } else bg.classList.add('hidden');
   renderDetailEvents(slug);
   document.title=r.name+' — Places of the Gold Country';
   window.scrollTo(0,0);
