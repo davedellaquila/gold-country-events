@@ -1,799 +1,583 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="color-scheme" content="light dark" />
-<link rel="icon" href="favicon.ico" sizes="any" />
-<link rel="shortcut icon" href="favicon.ico" />
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-<link rel="manifest" href="site.webmanifest" />
-<title>Gold Country Locations</title>
-<meta name="description" content="Every published place in the Gold Country events database — historic markers, wineries, viewpoints, halls, and gathering spots." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Country Locations — Every Place in the Database</title>
+<meta name="description" content="Browse every place in the Gold Country events database: historical markers, wineries, restaurants, diners and sights across the Mother Lode and the Sierra foothills — each with its own page.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#fffdf7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Inter:wght@400;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#fdf9f1; --bg2:#f7ecd9; --surface:#ffffff; --surface2:#fbf3e4;
-    --ink:#2b2015; --ink2:#57493a; --muted:#7d6c5a;
-    --line:#e7d9c3; --line2:#dcc9a6;
-    --accent:#9a6206; --accent-ink:#7c4d02; --accent-soft:#f6e3b8;
-    --gold:#c98f1b; --rust:#b5502a;
-    --chip-bg:#ffffff; --chip-on:#2b2015; --chip-on-ink:#fdf9f1;
-    --badge-bg:#2b2015; --badge-ink:#f9e7bd;
-    --shadow:0 1px 2px rgba(70,48,10,.06),0 10px 30px -14px rgba(70,48,10,.28);
-    --shadow-lg:0 24px 60px -18px rgba(43,32,21,.45);
-    --skel:#efe3cb; --skel2:#e6d5b2;
-    --focus:#b5502a;
-  }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#191410; --bg2:#211a13; --surface:#251d15; --surface2:#2c2318;
-      --ink:#f4e9d7; --ink2:#d8c8ae; --muted:#a89477;
-      --line:#3d3122; --line2:#52432c;
-      --accent:#e3aa3e; --accent-ink:#f0bc55; --accent-soft:#3d2f16;
-      --gold:#e3aa3e; --rust:#e07a4e;
-      --chip-bg:#251d15; --chip-on:#e3aa3e; --chip-on-ink:#241a08;
-      --badge-bg:#f4e9d7; --badge-ink:#2b2015;
-      --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 30px -14px rgba(0,0,0,.6);
-      --shadow-lg:0 24px 60px -18px rgba(0,0,0,.75);
-      --skel:#2c2318; --skel2:#3a2d1d;
-      --focus:#e3aa3e;
-    }
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  button,[role="button"],select,input{font:inherit}
-  button,select,input[type="search"]{min-height:44px}
-  a{color:var(--accent-ink)}
-  :focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 72px}
-
-  /* ---------- Hero ---------- */
-  .hero{position:relative;overflow:hidden;
-    background:linear-gradient(160deg,var(--bg2),var(--bg) 72%);
-    border-bottom:1px solid var(--line)}
-  .hero-inner{max-width:1180px;margin:0 auto;padding:44px 20px 30px}
-  .hero-icon{width:54px;height:54px;border-radius:13px;vertical-align:-13px;margin-right:14px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
-  .hero-rule{display:flex;align-items:center;gap:12px;color:var(--accent-ink);
-    font-size:12.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
-  .hero-rule::after{content:"";height:1px;flex:1;background:var(--line2)}
-  h1{font-family:"Newsreader",Georgia,serif;font-weight:600;
-    font-size:clamp(42px,7vw,68px);line-height:1.02;letter-spacing:-.01em;margin:14px 0 10px}
-  h1 em{font-style:italic;color:var(--accent-ink)}
-  .hero-sub{font-size:clamp(16px,2.4vw,19px);color:var(--ink2);max-width:620px;margin:0}
-  .hero-credit{margin-top:10px;font-size:13.5px;color:var(--muted)}
-  .hero-credit a{font-weight:600}
-  .hero-nav{margin-top:12px;font-size:14.5px;color:var(--ink2)}
-  .hero-nav a{font-weight:700}
-  .stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-  .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;
-    padding:10px 16px;box-shadow:var(--shadow);min-width:104px;cursor:pointer;
-    font:inherit;color:inherit;text-align:left;transition:border-color .15s ease,transform .15s ease}
-  .stat:hover{border-color:var(--accent-ink);transform:translateY(-1px)}
-  .stat:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
-  @keyframes statPulse{
-    0%,100%{box-shadow:var(--shadow),0 0 0 0 rgba(0,0,0,0);transform:scale(1)}
-    50%{box-shadow:var(--shadow),0 0 18px 3px color-mix(in srgb,var(--accent-ink) 38%,transparent);transform:scale(1.02)}
-  }
-  @keyframes facetPulse{
-    0%,100%{box-shadow:0 0 0 0 rgba(0,0,0,0)}
-    50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--accent-ink) 55%,transparent)}
-  }
-  .pulse-hit{animation:facetPulse .9s ease-in-out 4;border-radius:10px}
-  @media (prefers-reduced-motion: no-preference){
-    .stat{animation:statPulse 3s ease-in-out infinite}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .stat{animation:none}
-    .pulse-hit{animation:none}
-  }
-  .stat b{display:block;font-family:"Newsreader",Georgia,serif;font-size:26px;line-height:1.05;font-weight:700}
-  .stat span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-
-  /* ---------- Toolbar ---------- */
-  .toolbar{position:sticky;top:0;z-index:40;background:var(--bg);
-    border-bottom:1px solid var(--line);padding:14px 0 12px;margin-bottom:6px}
-  .toolbar-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .search{flex:1 1 240px;position:relative}
-  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);pointer-events:none}
-  .search input{width:100%;padding:10px 38px 10px 40px;border:1px solid var(--line2);border-radius:999px;
-    background:var(--surface);color:var(--ink);font-size:16px}
-  .search input::placeholder{color:var(--muted)}
-  .search input::-webkit-search-cancel-button{display:none}
-  .search .clear-q{position:absolute;right:4px;top:50%;transform:translateY(-50%);
-    width:36px;height:36px;min-height:36px;border:none;border-radius:50%;background:transparent;
-    color:var(--muted);font-size:18px;cursor:pointer;display:none;line-height:1}
-  .search.has-q .clear-q{display:block}
-  .hostsel{flex:0 1 230px;max-width:100%}
-  .hostsel select{width:100%;padding:10px 12px;border:1px solid var(--line2);border-radius:999px;
-    background:var(--surface);color:var(--ink);font-size:15px}
-  .viewtoggle{display:flex;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px;flex:none}
-  .viewtoggle button{border:none;background:transparent;color:var(--ink2);border-radius:999px;
-    padding:7px 16px;min-height:38px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:7px}
-  .viewtoggle button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
-  .viewtoggle svg{width:15px;height:15px}
-
-  .seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-  .seg button{border:1px solid var(--line2);background:var(--surface);color:var(--ink2);
-    border-radius:999px;padding:8px 15px;min-height:40px;font-weight:600;font-size:14px;cursor:pointer}
-  .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
-  @media (prefers-color-scheme: dark){.seg button[aria-pressed="true"]{color:#241a08}}
-
-  .towns{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
-  .towns-label{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:2px}
-  .chip{border:1px solid var(--line);background:var(--chip-bg);color:var(--ink2);
-    border-radius:999px;padding:7px 13px;min-height:38px;font-size:13.5px;font-weight:600;cursor:pointer}
-  .chip .n{color:var(--muted);font-weight:600;margin-left:4px;font-size:12.5px}
-  .chip[aria-pressed="true"]{background:var(--chip-on);color:var(--chip-on-ink);border-color:var(--chip-on)}
-  .chip[aria-pressed="true"] .n{color:inherit;opacity:.65}
-  .clearall{border:none;background:none;color:var(--rust);font-weight:700;font-size:14px;
-    cursor:pointer;padding:8px 10px;min-height:40px;text-decoration:underline;text-underline-offset:3px}
-
-  .countline{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:20px 0 16px}
-  .countline .big{font-family:"Newsreader",Georgia,serif;font-size:22px;font-weight:600}
-  .countline .small{color:var(--muted);font-size:14px}
-
-  /* ---------- Cards (grid) ---------- */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;
-    box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;text-align:left;
-    padding:0;color:inherit;width:100%;transition:transform .18s ease,box-shadow .18s ease}
-  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-  .card-media{position:relative;aspect-ratio:16/9;background:var(--surface2);overflow:hidden;flex:none}
-  .card-media img{width:100%;height:100%;object-fit:cover;display:block}
-  .card-media .noimg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-    background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 14px,var(--accent-soft) 14px,var(--accent-soft) 15px);color:var(--muted)}
-  .card-media .noimg svg{width:34px;height:34px;opacity:.6}
-  .card-media .noimg span{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
-  .datebadge{position:absolute;left:12px;bottom:12px;background:var(--badge-bg);color:var(--badge-ink);
-    border-radius:10px;padding:6px 11px 7px;text-align:center;line-height:1.1;box-shadow:var(--shadow)}
-  .datebadge .dow{display:block;font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
-  .datebadge .dnum{display:block;font-family:"Newsreader",Georgia,serif;font-size:21px;font-weight:700}
-  .reltag{position:absolute;top:12px;right:12px;background:var(--rust);color:#fff;font-size:12px;
-    font-weight:800;letter-spacing:.03em;border-radius:999px;padding:5px 11px;box-shadow:var(--shadow)}
-  .reltag.soon{background:var(--accent)}
-  .card-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
-  .card h3{font-family:"Newsreader",Georgia,serif;font-size:21px;font-weight:600;line-height:1.18;margin:0}
-  .meta{display:flex;align-items:flex-start;gap:8px;color:var(--ink2);font-size:14px}
-  .meta svg{width:15px;height:15px;flex:none;margin-top:3px;color:var(--accent)}
-  .desc{color:var(--muted);font-size:14px;margin:2px 0 0;
-    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .card-foot{margin-top:auto;padding-top:10px;display:flex;align-items:center;gap:8px}
-  .hostchip{font-size:12.5px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);
-    border-radius:999px;padding:4px 11px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .details-link{margin-left:auto;font-size:13.5px;font-weight:700;color:var(--accent-ink);flex:none}
-  .src-link{margin-left:auto;font-size:13.5px;font-weight:700;color:var(--accent-ink);text-decoration:underline;text-underline-offset:2px;cursor:pointer;flex:none}
-  .src-link:hover{color:var(--ink)}
-  .src-link + .details-link{margin-left:12px}
-  .row .src-link{margin-left:0;font-size:12.5px}
-  .hostchip{cursor:pointer}
-  .hostchip:hover{text-decoration:underline;text-underline-offset:2px}
-  .hostlink{font-weight:700;color:var(--accent-ink);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-  .hostlink:hover{color:var(--ink)}
-
-  /* ---------- List view ---------- */
-  .daygroup{margin-bottom:8px}
-  .dayhead{position:sticky;top:var(--stickytop,150px);z-index:5;background:var(--bg);
-    padding:12px 2px 8px;display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--line2)}
-  .dayhead .d{font-family:"Newsreader",Georgia,serif;font-size:20px;font-weight:700}
-  .dayhead .rel{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--rust)}
-  .row{display:flex;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);
-    border-top:none;padding:13px 16px;cursor:pointer;color:inherit;align-items:center}
-  .row:first-of-type{border-top:1px solid var(--line);border-radius:0}
-  .daygroup .row:last-child{border-radius:0 0 12px 12px}
-  .daygroup .row:first-of-type{border-radius:12px 12px 0 0}
-  .row:hover{background:var(--surface2)}
-  .row img,.row .rowph{width:64px;height:64px;flex:none;border-radius:10px;object-fit:cover;background:var(--surface2)}
-  .row .rowph{display:flex;align-items:center;justify-content:center;color:var(--muted)}
-  .row .rowph svg{width:24px;height:24px;opacity:.6}
-  .row-main{min-width:0;flex:1}
-  .row h3{font-size:16.5px;font-weight:700;margin:0 0 2px;line-height:1.25}
-  .row .rmeta{color:var(--muted);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .row .rtime{flex:none;text-align:right;font-weight:700;font-size:14px;color:var(--accent-ink);min-width:74px}
-  .row .rtime small{display:block;color:var(--muted);font-weight:600;font-size:12px}
-
-  /* ---------- States ---------- */
-  .skel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-  .skel{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
-  .skel .a{aspect-ratio:16/9;background:var(--skel)}
-  .skel .b{height:20px;margin:16px 18px 8px;border-radius:6px;background:var(--skel)}
-  .skel .c{height:14px;margin:0 18px 18px;width:55%;border-radius:6px;background:var(--skel)}
-  .pulse{animation:pulse 1.3s ease-in-out infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
-  .state{background:var(--surface);border:1px dashed var(--line2);border-radius:16px;
-    padding:44px 24px;text-align:center;color:var(--ink2)}
-  .state h2{font-family:"Newsreader",Georgia,serif;font-size:26px;margin:0 0 8px;color:var(--ink)}
-  .state p{margin:0 auto 18px;max-width:420px}
-  .btn{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:11px 24px;
-    font-weight:700;cursor:pointer;font-size:15px}
-  @media (prefers-color-scheme: dark){.btn{color:#241a08}}
-  .btn.ghost{background:var(--surface);color:var(--accent-ink);border:1px solid var(--line2)}
-  .showmore{display:block;margin:28px auto 0}
-
-  footer{border-top:1px solid var(--line);margin-top:56px;padding-top:20px;color:var(--muted);font-size:13.5px;
-    display:flex;flex-wrap:wrap;gap:8px 20px;justify-content:space-between}
-
-  /* ---------- Modal ---------- */
-  .scrim{position:fixed;inset:0;background:rgba(20,13,5,.55);z-index:80;display:none;
-    align-items:flex-end;justify-content:center;padding:0}
-  .scrim.open{display:flex}
-  .sheet{background:var(--surface);color:var(--ink);width:100%;max-width:640px;max-height:92vh;overflow:auto;
-    border-radius:20px 20px 0 0;box-shadow:var(--shadow-lg);animation:up .22s ease}
-  @keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
-  @media (min-width:700px){.scrim{align-items:center;padding:24px}.sheet{border-radius:20px}}
-  .sheet-media{position:relative;aspect-ratio:16/8;background:var(--surface2)}
-  .sheet-media img{width:100%;height:100%;object-fit:cover;display:block}
-  .sheet-media .noimg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);
-    background:repeating-linear-gradient(135deg,var(--surface2),var(--surface2) 14px,var(--accent-soft) 14px,var(--accent-soft) 15px)}
-  .sheet-media .noimg svg{width:44px;height:44px;opacity:.55}
-  .sheet-x{position:absolute;top:12px;right:12px;width:44px;height:44px;border:none;border-radius:50%;
-    background:rgba(20,13,5,.55);color:#fff;font-size:20px;cursor:pointer;line-height:1;z-index:2}
-  .sheet-body{padding:22px 24px 28px}
-  .sheet .rel{display:inline-block;background:var(--rust);color:#fff;font-size:12px;font-weight:800;
-    border-radius:999px;padding:4px 11px;margin-bottom:10px}
-  .sheet .rel.soon{background:var(--accent)}
-  .sheet h2{font-family:"Newsreader",Georgia,serif;font-size:31px;font-weight:600;line-height:1.12;margin:0 0 14px}
-  .facts{display:flex;flex-direction:column;gap:10px;margin:0 0 16px;padding:14px 16px;
-    background:var(--surface2);border:1px solid var(--line);border-radius:12px}
-  .fact{display:flex;gap:10px;font-size:15px;align-items:flex-start}
-  .fact svg{width:17px;height:17px;flex:none;margin-top:3px;color:var(--accent)}
-  .fact b{font-weight:700}
-  .fact a{font-weight:600}
-  .sheet .full{font-size:16px;color:var(--ink2);white-space:pre-wrap;margin:0 0 20px}
-  .sheet-actions{display:flex;gap:10px;flex-wrap:wrap}
-  .sheet-actions .btn{text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
-  @media (prefers-reduced-motion: reduce){
-    .card{transition:none}.sheet{animation:none}html{scroll-behavior:auto}.pulse{animation:none}
-  }
-  @media (max-width:560px){
-    .hero-inner{padding:32px 20px 24px}
-    .grid,.skel-grid{grid-template-columns:1fr}
-    .row .rtime{min-width:60px;font-size:13px}
-    .hostsel{flex:1 1 160px}
-    /* phone: the filter header scrolls away with the page (Dave, Nov 22) */
-    .toolbar{position:static}
-    .dayhead{position:static}
-  }
-
-  /* ---------- Full-screen photo viewer (newspaper standard, Nov 22) ---------- */
-  .card-media img, .row img, .sheet-media img{cursor:zoom-in}
-  .lightbox{position:fixed;inset:0;z-index:120;background:rgba(12,8,3,.94);display:none;
-    align-items:center;justify-content:center}
-  .lightbox.open{display:flex}
-  .lb-fig{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;
-    max-width:97vw;max-height:100vh;max-height:100dvh;padding:18px 12px}
-  .lb-fig img{max-width:96vw;max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);
-    object-fit:contain;display:block;border-radius:6px;background:#000}
-  .lb-cap{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;color:#fff;max-width:720px}
-  .lb-name{font-family:"Newsreader",Georgia,serif;font-size:21px;font-weight:600;line-height:1.2}
-  .lb-meta{font-size:13.5px;color:rgba(255,255,255,.78)}
-  .lb-count{font-size:12px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.55);margin-top:4px}
-  .lb-x{position:absolute;top:14px;right:14px;width:44px;height:44px;border:none;border-radius:50%;
-    background:rgba(255,255,255,.14);color:#fff;font-size:24px;line-height:1;cursor:pointer;z-index:2}
-  .lb-x:hover{background:rgba(255,255,255,.28)}
-  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border:none;border-radius:50%;
-    background:rgba(255,255,255,.14);color:#fff;font-size:32px;line-height:1;cursor:pointer;z-index:2;
-    display:flex;align-items:center;justify-content:center;padding:0 0 4px}
-  .lb-nav:hover{background:rgba(255,255,255,.28)}
-  .lb-prev{left:12px}.lb-next{right:12px}
-  @media (max-width:560px){
-    .lb-nav{width:42px;height:42px;font-size:27px}
-    .lb-name{font-size:18px}
-  }
-  /* ---------- Locations browser additions ---------- */
-  .typebadge{position:absolute;top:12px;left:12px;background:var(--accent);color:#fff;font-size:12px;
-    font-weight:800;letter-spacing:.03em;border-radius:999px;padding:5px 11px;box-shadow:var(--shadow)}
-  @media (prefers-color-scheme: dark){.typebadge{color:#241a08}}
-  .addr{color:var(--muted);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .evchip{font-size:12.5px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);
-    border-radius:999px;padding:4px 11px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .sheet-credit{padding:8px 24px 0;font-size:12.5px;color:var(--muted)}
-  .sheet-h3{font-family:"Newsreader",Georgia,serif;font-size:19px;font-weight:600;margin:0 0 10px}
-  .ulev{display:flex;flex-direction:column;gap:8px;margin:0 0 20px}
-  .ulev a{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 14px;
-    background:var(--surface2);border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink)}
-  .ulev a:hover{border-color:var(--accent-ink)}
-  .ulev a .un{font-weight:600}
-  .ulev a span:last-child{color:var(--muted);font-weight:600;font-size:13.5px;flex:none}
+:root{
+  --bg:#fffdf7; --paper:#fffaf0; --card:#ffffff; --ink:#241a12; --muted:#6b5d4f; --line:#e8ddc9;
+  --gold:#b7791f; --gold-bg:#fff3cf; --rust:#9c3d1e; --rust-bg:#fdeee8; --teal:#2f5d50; --teal-bg:#e6f0eb;
+  --chip:#f3ead6; --shadow:0 10px 30px rgba(60,35,0,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#171310; --paper:#1e1915; --card:#241e19; --ink:#f5ead8; --muted:#c9b8a3; --line:#3d332a; --gold:#e9b44c; --gold-bg:#332a15; --rust:#ff9a7a; --rust-bg:#3a2018; --teal:#8fd0b8; --teal-bg:#1e332c; --chip:#2e2720; --shadow:0 10px 30px rgba(0,0,0,.35); }
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Serif 4",Georgia,serif;line-height:1.55}
+a{color:var(--rust)} button,input,select{font-family:Inter,system-ui,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px 48px}
+.hero{padding:28px 0 8px}
+.kicker{font-family:Inter,sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+h1{font-family:"Playfair Display",Georgia,serif;font-size:clamp(38px,6vw,64px);line-height:.95;margin:10px 0 12px;letter-spacing:-.02em}
+.lede{font-size:19px;max-width:720px;color:var(--muted)}
+.lede strong{color:var(--ink)}
+.hero-link{font-family:Inter,sans-serif;font-size:14.5px;margin:10px 0 0}
+.controls{position:sticky;top:0;z-index:20;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line)}
+@media (max-width:640px){ .controls{position:static} }
+.search{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px;min-height:44px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+.filters button{min-height:38px;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-weight:600;cursor:pointer;font-size:13.5px}
+.filters button.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters button:focus-visible,.search:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.townsel{margin-left:auto;font-size:13.5px;font-weight:600;min-height:38px;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}
+.count{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);margin-top:10px}
+.count:empty{margin:0}
+.grid{margin-top:18px}
+.grid-cols{display:flex;gap:16px;align-items:flex-start}
+.grid-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px}
+@media(max-width:760px){.grid-cols{flex-direction:column}.grid-col{width:100%}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border-top:6px solid var(--gold);position:relative;scroll-margin-top:16px;width:100%}
+.card[data-cat="marker"]{border-top-color:var(--teal)}
+.card[data-cat="winery"]{border-top-color:var(--rust)}
+.card[data-cat="food"]{border-top-color:var(--gold)}
+.card[data-cat="sight"]{border-top-color:var(--ink)}
+.card.hash-highlight{outline:3px solid var(--gold);outline-offset:3px;box-shadow:0 0 0 7px var(--gold-bg),var(--shadow)}
+.photofig{margin:0}
+.photo-btn{display:block;width:100%;padding:0;border:0;background:none;cursor:pointer}
+.photo-btn:focus-visible{outline:3px solid var(--gold);outline-offset:-3px}
+.cardphoto{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--chip)}
+.credit{font-family:Inter,sans-serif;font-size:11px;color:var(--muted);padding:6px 16px 0;margin:0}
+.cardbody{padding:14px 16px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:Inter,sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.meta .evcount{color:var(--teal);white-space:nowrap}
+.card h3{font-family:"Playfair Display",serif;font-size:24px;line-height:1.08;margin:0}
+.card-title-link{cursor:pointer}
+.card-title-link:hover{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.card-title-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:4px}
+.area{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);margin:0}
+.addr{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);margin:0}
+.desc{color:var(--muted);font-size:15.5px;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-actions{display:flex;gap:8px;margin-top:auto;padding-top:10px;align-items:stretch}
+.details-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 13px;border-radius:10px;border:1.5px solid var(--gold);background:var(--gold-bg);color:var(--ink);font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap;flex:1 1 auto;text-decoration:none}
+.details-btn:hover{border-color:var(--ink)}
+.details-btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.copy-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:10px 13px;border-radius:10px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap}
+.copy-btn:hover{border-color:var(--muted)}
+.copy-btn.copied{border-color:var(--teal);color:var(--teal)}
+.copy-btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.morewrap{text-align:center;margin-top:22px}
+.more-btn{min-height:44px;padding:11px 22px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:14.5px;cursor:pointer;box-shadow:var(--shadow)}
+.more-btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.empty{font-family:Inter,sans-serif;color:var(--muted);text-align:center;padding:34px 10px;font-size:15px}
+footer{font-family:Inter,sans-serif;font-size:12.5px;color:var(--muted);margin-top:28px;line-height:1.6;border-top:1px solid var(--line);padding-top:14px}
+.hidden{display:none!important}
+/* ---------- photo viewer (full-screen, drag-down to dismiss) ---------- */
+.viewer{position:fixed;inset:0;z-index:120;background:rgba(12,9,6,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;touch-action:none}
+.viewer[hidden]{display:none}
+.viewer img{max-width:96vw;max-height:84vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5);-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
+.viewer-cap{color:#f5ead8;font-family:Inter,sans-serif;font-size:13.5px;margin:12px 0 0;text-align:center}
+.viewer-close{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.08);color:#fff;font-size:20px;cursor:pointer;line-height:1;z-index:2}
+.viewer-close:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.viewer-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;will-change:transform;max-width:100%}
+.viewer-hint{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:rgba(245,234,216,.6);font-family:Inter,sans-serif;font-size:12.5px;margin:0;pointer-events:none}
+/* ---------- detail view ---------- */
+#detail-view .detail-wrap{max-width:860px;margin:0 auto;padding:20px 18px 56px}
+.back-btn{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:14.5px;cursor:pointer;box-shadow:var(--shadow)}
+.back-btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.detail-photofig{margin:18px 0 0}
+.detail-photo-btn{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;border-radius:14px}
+.detail-photo-btn img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px;background:var(--chip)}
+.detail-photo-btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.detail-photofig .credit{padding:6px 2px 0}
+.detail-nophoto{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:12px 14px;margin:18px 0 0}
+.detail-meta{margin-top:18px}
+.detail-title{font-family:"Playfair Display",Georgia,serif;font-size:clamp(30px,5vw,42px);line-height:1.05;margin:6px 0 10px}
+.detail-desc{font-size:17px;color:var(--ink);white-space:pre-wrap}
+.detail-info{margin-top:20px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 18px;box-shadow:var(--shadow)}
+.info-row{display:flex;gap:16px;padding:12px 0;border-bottom:1px dashed var(--line);font-family:Inter,sans-serif;font-size:15px}
+.info-row:last-child{border-bottom:0}
+.info-label{flex:0 0 86px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;padding-top:3px}
+.info-value{flex:1 1 auto;line-height:1.55;min-width:0}
+.info-value a{font-weight:600}
+.info-sub{display:block;font-size:12.5px;color:var(--muted)}
+.detail-actions{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap}
+.detail-events{margin-top:24px}
+.detail-events h2{font-family:"Playfair Display",serif;font-size:24px;margin:0 0 10px}
+.evrow{display:flex;gap:12px;align-items:baseline;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:8px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow)}
+.evrow:hover{border-color:var(--gold)}
+.evrow .evname{font-weight:700;font-size:15.5px}
+.evrow .evwhen{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);white-space:nowrap}
+.detail-loading{font-family:Inter,sans-serif;color:var(--muted);padding:40px 0;font-size:15px}
+.detail-bottom{margin-top:26px}
+a[href^="tel:"]{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:var(--muted)}
 </style>
 </head>
 <body>
-
-<header class="hero">
-  <div class="hero-inner">
-    <div class="hero-rule">Amador County · California Gold Country</div>
-    <h1><img class="hero-icon" src="favicon-192.png" alt="" aria-hidden="true">Gold Country <em>Locations</em></h1>
-    <p class="hero-sub">Every published place in the events database — historic markers, Shenandoah Valley wineries, Sierra viewpoints, and the halls and gathering spots in between.</p>
-    <p class="hero-credit">From the events database curated by <a href="https://davedellaquila.github.io/buddy-system/events-buddy/" target="_blank" rel="noopener">Events Buddy</a> — the same store the Fiddletown Gazette and morning briefings draw from.</p>
-    <p class="hero-nav">Looking for what's on, rather than where? <a href="index.html">Gold Country Events →</a></p>
-    <div class="stats" id="stats" aria-live="polite">
-      <button type="button" class="stat" id="stat-published"><b>—</b><span>Published</span></button>
-      <button type="button" class="stat" id="stat-markers"><b>—</b><span>Markers</span></button>
-      <button type="button" class="stat" id="stat-towns"><b>—</b><span>Towns</span></button>
-    </div>
+<div class="wrap" id="list-view">
+  <div class="hero">
+    <div class="kicker">Gold Country · Places</div>
+    <h1>Places of the Gold Country</h1>
+    <p class="lede">Every place in the database — <strong>historical markers, wineries, diners, distilleries and sights</strong> across the Mother Lode and the Sierra foothills. Every place has its own page; tap a card for the full story, or copy its link to share it.</p>
+    <p class="hero-link">Looking for what's on? <a href="https://events.fiddletowngazette.com/">Browse the Gold Country events calendar →</a></p>
   </div>
-</header>
+  <div class="controls">
+    <input class="search" id="q" type="search" placeholder="Search places — try “distillery”, “Volcano”, “burger”…" aria-label="Search places">
+    <div class="filters" id="pills" role="group" aria-label="Filter by kind of place"></div>
+    <div class="count" id="count" aria-live="polite"></div>
+  </div>
+  <div class="grid" id="grid"><p class="empty" id="loading">Loading places…</p></div>
+  <div class="morewrap"><button class="more-btn hidden" id="more" type="button">Show more places</button></div>
+  <footer>Places are drawn live from the Gold Country events database — the same records the Fiddletown Gazette prints from. Marker texts and photos come from the Historical Marker Database (HMdb) unless credited otherwise. <a href="https://events.fiddletowngazette.com/">Events calendar →</a></footer>
+</div>
 
-<div class="wrap">
-  <div class="toolbar" id="toolbar">
-    <div class="toolbar-row">
-      <div class="search" id="searchbox">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
-        <input id="q" type="search" placeholder="Search places, towns, or descriptions…" aria-label="Search locations" autocomplete="off">
-        <button class="clear-q" id="clearq" type="button" aria-label="Clear search">×</button>
+<div id="detail-view" hidden>
+  <div class="detail-wrap">
+    <button class="back-btn" id="detail-back" type="button">← All places</button>
+    <p class="detail-loading" id="detail-loading">Loading this place…</p>
+    <div id="detail-body" hidden>
+      <figure class="detail-photofig" id="detail-photofig">
+        <button class="detail-photo-btn" id="detail-photo-btn" type="button"><img id="detail-img" alt=""></button>
+        <figcaption class="credit" id="detail-credit"></figcaption>
+      </figure>
+      <p class="detail-nophoto" id="detail-nophoto" hidden>No photo on file for this place yet.</p>
+      <div class="detail-meta meta" id="detail-meta"></div>
+      <h1 class="detail-title" id="detail-title"></h1>
+      <p class="detail-desc" id="detail-desc"></p>
+      <div class="detail-info" id="detail-info"></div>
+      <div class="detail-actions">
+        <button class="copy-btn" id="detail-copy" type="button">🔗 <span>Copy link</span></button>
+        <a class="details-btn hidden" id="detail-dir" target="_blank" rel="noopener">Directions →</a>
+        <a class="details-btn hidden" id="detail-web" target="_blank" rel="noopener">Visit website →</a>
       </div>
-      <div class="hostsel">
-        <select id="town" aria-label="Filter by town"><option value="">All towns</option></select>
+      <div class="detail-events" id="detail-events" hidden>
+        <h2>Upcoming events here</h2>
+        <div id="detail-events-list"></div>
       </div>
-    </div>
-    <div class="seg" id="cats" role="group" aria-label="Filter by type">
-      <button type="button" data-cat="all" data-label="All places" aria-pressed="true">All places</button>
-      <button type="button" data-cat="markers" data-label="Historical markers" aria-pressed="false">Historical markers</button>
-      <button type="button" data-cat="wineries" data-label="Wineries &amp; vineyards" aria-pressed="false">Wineries &amp; vineyards</button>
-      <button type="button" data-cat="sights" data-label="Sights &amp; viewpoints" aria-pressed="false">Sights &amp; viewpoints</button>
-      <button type="button" data-cat="food" data-label="Food, drink &amp; stays" aria-pressed="false">Food, drink &amp; stays</button>
+      <div class="detail-bottom"><button class="back-btn" id="detail-back-2" type="button">← All places</button></div>
     </div>
   </div>
+</div>
 
-  <div class="countline">
-    <span class="big" id="count-big">Loading the locations database…</span>
-    <span class="small" id="count-small"></span>
-    <button class="clearall" id="clearall" type="button" hidden>Clear all filters</button>
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <button class="viewer-close" id="viewer-close" type="button" aria-label="Close photo viewer">✕</button>
+  <div class="viewer-stage" id="viewer-stage">
+    <img id="viewer-img" alt="">
+    <p class="viewer-cap" id="viewer-cap"></p>
   </div>
-
-  <main id="results" aria-live="polite"></main>
-  <div id="more-wrap"></div>
-
-  <footer>
-    <span>Gold Country Locations — a public, read-only view of the events database.</span>
-    <span>Listings curated by Events Buddy · Marker photos via HMdb contributors</span>
-  </footer>
+  <p class="viewer-hint">Drag down or tap ✕ to close</p>
 </div>
 
-<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
-  <div class="sheet" id="sheet"></div>
-</div>
-
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
-  <button class="lb-x" id="lb-x" type="button" aria-label="Close photo viewer">×</button>
-  <button class="lb-nav lb-prev" id="lb-prev" type="button" aria-label="Previous photo">‹</button>
-  <figure class="lb-fig" id="lb-fig">
-    <img id="lb-img" alt="">
-    <figcaption class="lb-cap">
-      <span class="lb-name" id="lb-name"></span>
-      <span class="lb-meta" id="lb-meta"></span>
-      <span class="lb-count" id="lb-count"></span>
-    </figcaption>
-  </figure>
-  <button class="lb-nav lb-next" id="lb-next" type="button" aria-label="Next photo">›</button>
-</div>
-
+<script async src="https://visitor-counter.dave-5d7.workers.dev/beacon.js" data-site="gold-country-events"></script>
 <script>
 (function(){
-  "use strict";
-  var SUPA = 'https://ydftcebaftngcdjvxrgl.supabase.co/rest/v1/';
-  var ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkZnRjZWJhZnRuZ2NkanZ4cmdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1NDA5NDcsImV4cCI6MjA3NjExNjk0N30.8AlcsUMJSxBlua-ehaGLAn69bbORoMBdjM--MSxxXF0';
-  var LOC_URL = SUPA + 'locations?select=name,slug,city,region,address,short_description,website_url,phone,latitude,longitude,photo_url,photo_credit'
-    + '&status=eq.published&order=name.asc&limit=1000';
-  var EV_URL = SUPA + 'events?select=name,slug,start_date,start_time,end_date,end_time,location,host_org,website_url'
-    + '&status=eq.published&order=start_date.asc&limit=1000';
-  var PAGE = 48;
-  var $ = function(id){ return document.getElementById(id); };
-  var resultsEl = $('results'), moreWrap = $('more-wrap');
+"use strict";
+var ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkZnRjZWJhZnRuZ2NkanZ4cmdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1NDA5NDcsImV4cCI6MjA3NjExNjk0N30.8AlcsUMJSxBlua-ehaGLAn69bbORoMBdjM--MSxxXF0';
+var BASE = 'https://ydftcebaftngcdjvxrgl.supabase.co/rest/v1/';
+var SHARE_BASE = 'https://events.fiddletowngazette.com/locations.html';
+var EVENTS_URL = 'https://events.fiddletowngazette.com/';
+var PAGE = 48;
+var LS_KEY = 'gcloc.filters.v1';
 
-  function laToday(){
-    var d = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }
-  var todayLA = laToday();
-  function parseDate(s){ if(!s) return null; var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
-  function dayDiff(a, b){ return Math.round((a - b) / 86400000); }
-  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function esc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function normName(s){ return (s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,' ').trim(); }
 
-  var DOW = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var MON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  function fmtDay(d){ return DOW[d.getDay()] + ', ' + MON[d.getMonth()] + ' ' + d.getDate() + (d.getFullYear() !== todayLA.getFullYear() ? ', ' + d.getFullYear() : ''); }
-  function fmtTime(t){
-    if(!t) return '';
-    var p = t.split(':'), h = +p[0], m = +p[1] || 0;
-    var ap = h >= 12 ? 'PM' : 'AM'; var hh = h % 12; if(hh === 0) hh = 12;
-    return hh + (m ? ':' + String(m).padStart(2, '0') : '') + ' ' + ap;
-  }
-  function timeRange(ev){
-    var a = fmtTime(ev.start_time), b = fmtTime(ev.end_time);
-    if(a && b) return a + ' – ' + b;
-    if(a) return a;
-    return 'Time TBA';
-  }
+/* ---------- categories (client-side derivation; the live table has no category column) ---------- */
+var WINERY_NAMES = {'lusso della terra':1};
+function categoryOf(r){
+  var host = '';
+  try{ host = r.website_url ? new URL(r.website_url).hostname.replace(/^www\./,'') : ''; }catch(e){}
+  if(host === 'hmdb.org') return 'marker';
+  var n = (r.name||'').toLowerCase();
+  if(WINERY_NAMES[n]) return 'winery';
+  if(/winery|vineyard|cellars|wines|estate|vino|château/.test(n)) return 'winery';
+  if(/inn|pub|restaurant|cafe|café|grill|bakery|brew|kitchen|tavern|saloon|hotel|motel|lodge|diner|burger|eats|frosty|deli|coffee|distill|bistro|drive-in/.test(n)) return 'food';
+  return 'sight';
+}
+var CATS = [
+  {id:'all',   label:'All places'},
+  {id:'marker',label:'Historical markers'},
+  {id:'winery',label:'Wineries & vineyards'},
+  {id:'food',  label:'Food, drink & stays'},
+  {id:'sight', label:'Sights & viewpoints'}
+];
+var CAT_LABEL = {marker:'Historical marker', winery:'Winery & vineyard', food:'Food, drink & stays', sight:'Sights & viewpoints'};
 
-  var ICON_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>';
-  var ICON_GLB = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg>';
-  var ICON_PHN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>';
+/* ---------- state ---------- */
+var rows = [], bySlug = {}, evByLoc = {}, eventsLoaded = false;
+var state = { q:'', cat:'all', town:'', shown: PAGE };
+try{
+  var saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+  if(saved){ state.q = saved.q||''; state.cat = saved.cat||'all'; state.town = saved.town||''; }
+}catch(e){}
+function saveState(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({q:state.q, cat:state.cat, town:state.town})); }catch(e){} }
 
-  var CAT_LABEL = { markers: 'Historical marker', wineries: 'Winery & vineyard', sights: 'Sight & viewpoint', food: 'Food, drink & stays' };
-  var state = { q: '', cat: 'all', town: '', shown: PAGE };
-  var rows = [], currentList = [], loaded = false;
+/* ---------- elements ---------- */
+var $ = function(id){ return document.getElementById(id); };
+var listView=$('list-view'), detailView=$('detail-view'), grid=$('grid'), countEl=$('count'),
+    pillsEl=$('pills'), qEl=$('q'), moreBtn=$('more');
 
-  function normName(s){
-    return String(s || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
-  }
-  var WINERY_NAMES = { 'lusso della terra': 1 }; /* wineries whose names carry no winery word */
-  function categoryOf(name, website){
-    if(website && /hmdb\.org/i.test(website)) return 'markers';
-    var n = String(name || '').toLowerCase();
-    if(WINERY_NAMES[n]) return 'wineries';
-    if(/(winery|vineyard|cellars|wines|estate|vino|château|chateau)/.test(n)) return 'wineries';
-    if(/(inn|pub|restaurant|cafe|café|grill|bakery|brew|kitchen|tavern|saloon|hotel|motel|lodge|bed and breakfast|b&b|diner|burger|eats|frosty|deli|coffee|ranch)/.test(n)) return 'food';
-    return 'sights';
-  }
-  function normalizeLoc(r){
-    var city = (r.city || '').trim(), region = (r.region || '').trim();
-    var area = city ? (region && region !== city + ' County' ? city + ' · ' + region : city) : region;
-    return {
-      name: r.name || 'Untitled place', slug: r.slug || '', city: city, region: region, area: area,
-      address: (r.address || '').trim(), desc: (r.short_description || '').trim(),
-      website: r.website_url || '', phone: (r.phone || '').trim(),
-      lat: r.latitude ? parseFloat(r.latitude) : null, lng: r.longitude ? parseFloat(r.longitude) : null,
-      photo: r.photo_url || '', credit: (r.photo_credit || '').trim(),
-      cat: categoryOf(r.name, r.website_url), nname: normName(r.name), evs: []
-    };
-  }
-  function mapsUrl(l){
-    if(l.lat && l.lng) return 'https://maps.apple.com/?ll=' + l.lat + ',' + l.lng + '&q=' + encodeURIComponent(l.name);
-    return 'https://maps.apple.com/?q=' + encodeURIComponent(l.address || (l.name + (l.city ? ', ' + l.city + ', CA' : '')));
-  }
-  function evLink(l){ return 'index.html?q=' + encodeURIComponent(l.name); }
+/* ---------- routing (burger-guide pattern: dual route ?place=<slug> + #/place/<slug>) ---------- */
+function routeSlug(){
+  var h = window.location.hash || '';
+  var m = h.match(/^#\/place\/(.+)$/);
+  if(m){ var s=m[1]; try{ s=decodeURIComponent(s); }catch(e){} return s; }
+  try{ var q = new URLSearchParams(window.location.search).get('place'); if(q) return q; }catch(e){}
+  var b = h.replace(/^#/,'');
+  return b || null;
+}
+var currentDetail = null, currentPhoto = null, sessionNav = false, coldDetail = false, savedScrollY = 0, dataReady = false;
 
-  /* ---------- Filters ---------- */
-  function facetRows(except){
-    var q = state.q.trim().toLowerCase();
-    return rows.filter(function(l){
-      if(except !== 'q' && q){
-        var hay = (l.name + ' ' + l.city + ' ' + l.region + ' ' + l.address + ' ' + l.desc).toLowerCase();
-        if(hay.indexOf(q) === -1) return false;
-      }
-      if(except !== 'cat' && state.cat !== 'all' && l.cat !== state.cat) return false;
-      if(except !== 'town' && state.town && l.city !== state.town) return false;
-      return true;
+function detailURL(slug){ return SHARE_BASE + '?place=' + encodeURIComponent(slug) + '#/place/' + encodeURIComponent(slug); }
+
+/* ---------- copy link ---------- */
+function copyText(text, done){
+  function fallback(){
+    var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    var ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta); done(ok);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback); }
+  else fallback();
+}
+function wireCopy(btn, getSlug){
+  var timer=null;
+  btn.addEventListener('click', function(ev){
+    ev.stopPropagation();
+    var slug = (typeof getSlug==='function') ? getSlug() : getSlug;
+    if(!slug) return;
+    var lbl = btn.querySelector('span');
+    copyText(detailURL(slug), function(ok){
+      btn.classList.toggle('copied', ok);
+      if(lbl) lbl.textContent = ok ? 'Link copied' : 'Copy failed — try again';
+      if(timer) clearTimeout(timer);
+      timer=setTimeout(function(){ btn.classList.remove('copied'); if(lbl) lbl.textContent='Copy link'; }, 2200);
+    });
+  });
+}
+
+/* ---------- data ---------- */
+function fetchJSON(url){
+  return fetch(url, {headers:{apikey:ANON_KEY, Authorization:'Bearer '+ANON_KEY}, cache:'no-store'}).then(function(r){
+    if(!r.ok) throw new Error('feed '+r.status); return r.json();
+  });
+}
+function loadLocations(){
+  var fields='id,name,slug,short_description,address,city,region,website_url,phone,latitude,longitude,photo_url,photo_credit';
+  var all=[], off=0;
+  function page(){
+    return fetchJSON(BASE+'locations?select='+fields+'&status=eq.published&order=name.asc&limit=1000&offset='+off).then(function(chunk){
+      all=all.concat(chunk);
+      if(chunk.length===1000){ off+=1000; return page(); }
+      return all;
     });
   }
-  function filtered(){ return facetRows(null); }
-  function anyFilter(){ return !!(state.q || state.cat !== 'all' || state.town); }
-
-  function buildCats(){
-    var counts = { all: 0, markers: 0, wineries: 0, sights: 0, food: 0 };
-    facetRows('cat').forEach(function(l){ counts.all++; counts[l.cat]++; });
-    Array.prototype.forEach.call(document.querySelectorAll('#cats button'), function(b){
-      var c = b.getAttribute('data-cat');
-      b.setAttribute('aria-pressed', state.cat === c ? 'true' : 'false');
-      b.textContent = b.getAttribute('data-label') + (counts[c] ? ' (' + counts[c] + ')' : '');
+  return page();
+}
+function loadEvents(){
+  var fields='id,name,slug,host_org,location,start_date,start_time,end_time';
+  var today=new Date(); var iso=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  return fetchJSON(BASE+'events?select='+fields+'&status=eq.published&start_date=gte.'+iso+'&order=start_date.asc,start_time.asc&limit=1000');
+}
+function applyEvents(events){
+  var evs = events.map(function(ev){ return {ev:ev, hn:normName(ev.host_org), ln:normName(ev.location)}; });
+  evByLoc={};
+  rows.forEach(function(r){
+    var rn=r._nn; if(!rn) return;
+    evs.forEach(function(x){
+      var match = (x.hn && x.hn===rn) || (x.ln && (x.ln===rn || (rn.length>=8 && x.ln.indexOf(rn)===0) || (x.ln.length>=8 && rn.indexOf(x.ln)===0) || x.ln.indexOf(rn)>-1));
+      if(match){ (evByLoc[r.slug]=evByLoc[r.slug]||[]).push(x.ev); }
     });
-  }
-  function buildTowns(){
-    var counts = {};
-    facetRows('town').forEach(function(l){ if(l.city) counts[l.city] = (counts[l.city] || 0) + 1; });
-    var towns = Object.keys(counts).sort(function(a, b){ return counts[b] - counts[a] || a.localeCompare(b); });
-    var sel = $('town');
-    sel.innerHTML = '<option value="">All towns (' + towns.length + ')</option>';
-    towns.forEach(function(t){
-      var o = document.createElement('option'); o.value = t; o.textContent = t + ' (' + counts[t] + ')'; sel.appendChild(o);
-    });
-    sel.value = state.town;
-    var st = document.querySelectorAll('#stats .stat b');
-    if(st[2]) st[2].textContent = towns.length;
-  }
+  });
+  eventsLoaded=true;
+  renderGrid(false);
+  if(currentDetail) renderDetailEvents(currentDetail);
+}
 
-  /* ---------- Cards ---------- */
-  function cardHTML(l, i){
-    var media = l.photo
-      ? '<img src="' + esc(l.photo) + '" alt="" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="noimg" style="display:none">' + ICON_PIN + '<span>' + esc(l.city || 'Gold Country') + '</span></div>'
-      : '<div class="noimg">' + ICON_PIN + '<span>' + esc(l.city || 'Gold Country') + '</span></div>';
-    return '<button type="button" class="card" data-i="' + i + '" aria-label="' + esc(l.name) + '">'
-      + '<span class="card-media">' + media
-      + '<span class="typebadge">' + esc(CAT_LABEL[l.cat]) + '</span>'
-      + '</span>'
-      + '<span class="card-body"><h3>' + esc(l.name) + '</h3>'
-      + (l.area ? '<span class="meta">' + ICON_PIN + '<span>' + esc(l.area) + '</span></span>' : '')
-      + (l.address ? '<span class="addr">' + esc(l.address) + '</span>' : '')
-      + (l.desc ? '<span class="desc">' + esc(l.desc) + '</span>' : '')
-      + '<span class="card-foot">'
-      + (l.evs.length ? '<span class="evchip">' + l.evs.length + ' upcoming event' + (l.evs.length > 1 ? 's' : '') + '</span>' : '<span></span>')
-      + '<span class="src-link" data-url="' + esc(mapsUrl(l)) + '" title="Open in Apple Maps">Map ↗</span>'
-      + '<span class="details-link">Details →</span></span>'
-      + '</span></button>';
+/* ---------- list rendering ---------- */
+function filtered(){
+  var q=normName(state.q);
+  return rows.filter(function(r){
+    if(state.cat!=='all' && r._cat!==state.cat) return false;
+    if(state.town && (r.city||'')!==state.town) return false;
+    if(q && r._hay.indexOf(q)===-1) return false;
+    return true;
+  });
+}
+function facetTowns(){
+  var q=normName(state.q), counts={};
+  rows.forEach(function(r){
+    if(state.cat!=='all' && r._cat!==state.cat) return;
+    if(q && r._hay.indexOf(q)===-1) return;
+    if(r.city) counts[r.city]=(counts[r.city]||0)+1;
+  });
+  return counts;
+}
+function renderPills(){
+  var counts={all:rows.length, marker:0, winery:0, food:0, sight:0};
+  rows.forEach(function(r){ counts[r._cat]++; });
+  var html='';
+  CATS.forEach(function(c){
+    html+='<button type="button" data-cat="'+c.id+'" class="'+(state.cat===c.id?'active':'')+'" aria-pressed="'+(state.cat===c.id)+'">'+esc(c.label)+' ('+counts[c.id]+')</button>';
+  });
+  html+='<select class="townsel" id="town" aria-label="Filter by town"><option value="">All towns</option>';
+  var towns=facetTowns(), names=Object.keys(towns).sort();
+  names.forEach(function(t){ html+='<option value="'+esc(t)+'"'+(state.town===t?' selected':'')+'>'+esc(t)+' ('+towns[t]+')</option>'; });
+  html+='</select>';
+  pillsEl.innerHTML=html;
+  pillsEl.querySelectorAll('button[data-cat]').forEach(function(b){
+    b.addEventListener('click', function(){ state.cat=b.getAttribute('data-cat'); state.shown=PAGE; saveState(); renderPills(); renderGrid(true); });
+  });
+  var sel=$('town');
+  sel.addEventListener('change', function(){ state.town=sel.value; state.shown=PAGE; saveState(); renderGrid(true); });
+}
+function mapsURL(r){
+  if(r.latitude!=null && r.longitude!=null) return 'https://maps.apple.com/?ll='+r.latitude+','+r.longitude+'&q='+encodeURIComponent(r.name);
+  if(r.address) return 'https://maps.apple.com/?q='+encodeURIComponent(r.address);
+  return 'https://maps.apple.com/?q='+encodeURIComponent(r.name+(r.city?', '+r.city+', CA':''));
+}
+function cardHTML(r){
+  var evs=evByLoc[r.slug]||[];
+  var h='<article class="card" id="card-'+esc(r.slug)+'" data-cat="'+r._cat+'">';
+  if(r.photo_url){
+    h+='<figure class="photofig"><button class="photo-btn" type="button" data-goto="'+esc(r.slug)+'" aria-label="View details for '+esc(r.name)+'"><img class="cardphoto" loading="lazy" src="'+esc(r.photo_url)+'" alt="Photo of '+esc(r.name)+'"></button>';
+    if(r.photo_credit) h+='<figcaption class="credit">'+esc(r.photo_credit)+'</figcaption>';
+    h+='</figure>';
   }
-
-  function render(){
-    if(!loaded) return;
-    buildCats(); buildTowns();
-    var out = filtered();
-    currentList = out;
-    $('count-big').textContent = 'Showing ' + out.length + ' of ' + rows.length + ' locations';
-    var mk = 0, wp = 0;
-    rows.forEach(function(l){ if(l.cat === 'markers') mk++; if(l.photo) wp++; });
-    $('count-small').textContent = '(' + mk + ' markers · ' + wp + ' with photos)';
-    $('clearall').hidden = !anyFilter();
-    if(!rows.length) return;
-    if(!out.length){
-      resultsEl.innerHTML = '<div class="state"><h2>Nothing matches those filters</h2>'
-        + '<p>Try a different search, category, or town — or clear everything and browse all ' + rows.length + ' places.</p>'
-        + '<button class="btn" id="state-clear" type="button">Clear all filters</button></div>';
-      moreWrap.innerHTML = '';
-      var b = $('state-clear'); if(b) b.addEventListener('click', clearAll);
-      return;
+  h+='<div class="cardbody">';
+  h+='<div class="meta"><span>'+esc(CAT_LABEL[r._cat])+'</span>'+(eventsLoaded && evs.length?'<span class="evcount">'+evs.length+' upcoming event'+(evs.length>1?'s':'')+'</span>':'')+'</div>';
+  h+='<h3 class="card-title-link" data-goto="'+esc(r.slug)+'" tabindex="0" role="link">'+esc(r.name)+'</h3>';
+  var area=[r.city, r.region].filter(Boolean).join(' · ');
+  if(area) h+='<p class="area">'+esc(area)+'</p>';
+  if(r.address) h+='<p class="addr">'+esc(r.address)+'</p>';
+  if(r.short_description) h+='<p class="desc">'+esc(r.short_description)+'</p>';
+  h+='<div class="card-actions"><button class="details-btn" type="button" data-goto="'+esc(r.slug)+'">Details →</button><button class="copy-btn" type="button" data-copy="'+esc(r.slug)+'">🔗 <span>Copy link</span></button></div>';
+  h+='</div></article>';
+  return h;
+}
+function renderGrid(reset){
+  if(!dataReady) return;
+  var list=filtered();
+  var total=rows.length;
+  var markers=rows.filter(function(r){return r._cat==='marker';}).length;
+  var photos=rows.filter(function(r){return r.photo_url;}).length;
+  countEl.textContent='Showing '+Math.min(state.shown,list.length)+' of '+list.length+' locations'+(list.length!==total?' (filtered from '+total+')':'')+' · '+total+' in the database ('+markers+' markers · '+photos+' with photos)';
+  var slice=list.slice(0, state.shown);
+  if(!slice.length){ grid.innerHTML='<p class="empty">No places match — try a different search or filter.</p>'; moreBtn.classList.add('hidden'); wireGrid(); return; }
+  var wide = window.innerWidth>760;
+  if(wide){
+    var a='', b='';
+    slice.forEach(function(r,i){ if(i%2===0) a+=cardHTML(r); else b+=cardHTML(r); });
+    grid.innerHTML='<div class="grid-cols"><div class="grid-col">'+a+'</div><div class="grid-col">'+b+'</div></div>';
+  } else {
+    grid.innerHTML=slice.map(cardHTML).join('');
+  }
+  moreBtn.classList.toggle('hidden', state.shown>=list.length);
+  wireGrid();
+}
+function wireGrid(){
+  grid.querySelectorAll('[data-goto]').forEach(function(el){
+    el.addEventListener('click', function(){ goToDetail(el.getAttribute('data-goto')); });
+    if(el.classList.contains('card-title-link')){
+      el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); goToDetail(el.getAttribute('data-goto')); } });
     }
-    var slice = out.slice(0, state.shown);
-    resultsEl.innerHTML = '<div class="grid">' + slice.map(function(l){ return cardHTML(l, out.indexOf(l)); }).join('') + '</div>';
-    if(out.length > slice.length){
-      moreWrap.innerHTML = '<button class="btn ghost showmore" id="more" type="button">Show more places (' + (out.length - slice.length) + ' remaining)</button>';
-      $('more').addEventListener('click', function(){ state.shown += PAGE; render(); });
-    } else moreWrap.innerHTML = '';
-
-    Array.prototype.forEach.call(resultsEl.querySelectorAll('[data-i]'), function(el){
-      el.addEventListener('click', function(){ openDetail(currentList[+el.getAttribute('data-i')]); });
-      var sl = el.querySelector('.src-link');
-      if(sl) sl.addEventListener('click', function(e){
-        e.stopPropagation();
-        window.open(sl.getAttribute('data-url'), '_blank', 'noopener');
-      });
-      var ph = el.querySelector('img');
-      if(ph){
-        ph.title = 'View photo full-screen';
-        ph.addEventListener('click', function(e){
-          e.stopPropagation();
-          openLightbox(currentList[+el.getAttribute('data-i')]);
-        });
-      }
-    });
-  }
-
-  /* ---------- Detail sheet ---------- */
-  var scrim = $('scrim'), sheet = $('sheet'), lastFocus = null;
-  function openDetail(l){
-    if(!l) return;
-    lastFocus = document.activeElement;
-    var media = l.photo
-      ? '<img src="' + esc(l.photo) + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="noimg" style="display:none">' + ICON_PIN + '</div>'
-      : '<div class="noimg">' + ICON_PIN + '</div>';
-    var maps = mapsUrl(l);
-    var evHtml = '';
-    if(l.evs.length){
-      evHtml = '<h3 class="sheet-h3">Upcoming events here</h3><div class="ulev">'
-        + l.evs.map(function(ev){
-            var tr = timeRange(ev);
-            return '<a href="' + esc(evLink(l)) + '"><span class="un">' + esc(ev.name) + '</span><span>' + esc(fmtDay(ev.start) + (tr !== 'Time TBA' ? ' · ' + tr : '')) + '</span></a>';
-          }).join('')
-        + '</div>';
-    }
-    sheet.innerHTML =
-      '<div class="sheet-media">' + media
-      + '<button class="sheet-x" id="sheet-x" type="button" aria-label="Close details">×</button></div>'
-      + (l.credit ? '<div class="sheet-credit">Photo: ' + esc(l.credit) + '</div>' : '')
-      + '<div class="sheet-body">'
-      + '<span class="rel soon">' + esc(CAT_LABEL[l.cat]) + '</span>'
-      + '<h2 id="sheet-title">' + esc(l.name) + '</h2>'
-      + '<div class="facts">'
-      + (l.address
-          ? '<div class="fact">' + ICON_PIN + '<span>' + esc(l.address) + ' &nbsp;<a href="' + maps + '" target="_blank" rel="noopener">Open in Apple Maps</a></span></div>'
-          : (l.area ? '<div class="fact">' + ICON_PIN + '<span>' + esc(l.area) + '</span></div>' : ''))
-      + (l.phone ? '<div class="fact">' + ICON_PHN + '<span><a href="tel:+1' + esc(l.phone.replace(/[^0-9]/g, '')) + '">' + esc(l.phone) + '</a></span></div>' : '')
-      + (l.website ? '<div class="fact">' + ICON_GLB + '<span><a href="' + esc(l.website) + '" target="_blank" rel="noopener">' + (l.cat === 'markers' ? 'Marker record at HMdb' : 'Website') + '</a></span></div>' : '')
-      + '</div>'
-      + (l.desc ? '<p class="full">' + esc(l.desc) + '</p>' : '')
-      + evHtml
-      + '<div class="sheet-actions">'
-      + (l.website ? '<a class="btn" href="' + esc(l.website) + '" target="_blank" rel="noopener">' + (l.cat === 'markers' ? 'HMdb record' : 'Visit website') + '</a>' : '')
-      + '<a class="btn ghost" href="' + maps + '" target="_blank" rel="noopener">Directions</a>'
-      + '<a class="btn ghost" href="' + esc(evLink(l)) + '">Events here →</a>'
-      + '</div></div>';
-    scrim.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    $('sheet-x').addEventListener('click', closeDetail);
-    var simg = sheet.querySelector('.sheet-media img');
-    if(simg){
-      simg.title = 'View photo full-screen';
-      simg.addEventListener('click', function(){ openLightbox(l); });
-    }
-    $('sheet-x').focus();
-  }
-  function closeDetail(){
-    scrim.classList.remove('open');
-    document.body.style.overflow = '';
-    if(lastFocus && lastFocus.focus) lastFocus.focus();
-  }
-  scrim.addEventListener('click', function(e){ if(e.target === scrim) closeDetail(); });
-  document.addEventListener('keydown', function(e){
-    if(lbIsOpen()){
-      if(e.key === 'Escape') closeLightbox();
-      else if(e.key === 'ArrowLeft') stepLb(-1);
-      else if(e.key === 'ArrowRight') stepLb(1);
-      return;
-    }
-    if(e.key === 'Escape' && scrim.classList.contains('open')) closeDetail();
   });
+  grid.querySelectorAll('[data-copy]').forEach(function(btn){ wireCopy(btn, btn.getAttribute('data-copy')); });
+}
 
-  /* ---------- Full-screen photo viewer (newspaper standard, Nov 22) ---------- */
-  var lightbox = $('lightbox'), lbImg = $('lb-img'), lbName = $('lb-name'),
-      lbMeta = $('lb-meta'), lbCount = $('lb-count'),
-      lbPrev = $('lb-prev'), lbNext = $('lb-next'), lbFig = $('lb-fig');
-  var lbGroup = [], lbIdx = 0, lbReturn = null;
-  function lbIsOpen(){ return lightbox.classList.contains('open'); }
-  function openLightbox(l){
-    if(!l || !l.photo) return;
-    lbGroup = currentList.filter(function(x){ return !!x.photo; });
-    lbIdx = lbGroup.indexOf(l);
-    if(lbIdx < 0) return;
-    lbReturn = document.activeElement;
-    showLb();
-    lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    $('lb-x').focus();
+/* ---------- detail rendering ---------- */
+var LIST_TITLE=document.title;
+function fmtDate(iso){
+  var d=new Date(iso+'T12:00:00');
+  return d.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric'});
+}
+function fmtTime(t){
+  if(!t) return '';
+  var parts=t.split(':'); var hh=+parts[0], mm=parts[1]||'00';
+  var ap=hh>=12?'PM':'AM'; hh=hh%12; if(hh===0) hh=12;
+  return hh+(mm!=='00'?':'+mm:'')+' '+ap;
+}
+function infoRow(label, valueHTML){ return '<div class="info-row"><span class="info-label">'+label+'</span><span class="info-value">'+valueHTML+'</span></div>'; }
+function renderDetailEvents(slug){
+  var evs=evByLoc[slug]||[];
+  var box=$('detail-events'), listEl=$('detail-events-list');
+  if(!eventsLoaded || !evs.length){ box.hidden=true; return; }
+  box.hidden=false;
+  listEl.innerHTML=evs.map(function(ev){
+    var when=fmtDate(ev.start_date)+(ev.start_time?' · '+fmtTime(ev.start_time)+(ev.end_time?' – '+fmtTime(ev.end_time):''):'');
+    var q=encodeURIComponent(ev.host_org||ev.name);
+    return '<a class="evrow" href="'+EVENTS_URL+'?q='+q+'"><span class="evwhen">'+esc(when)+'</span><span class="evname">'+esc(ev.name)+'</span></a>';
+  }).join('');
+}
+function showDetail(slug){
+  var r=bySlug[slug];
+  if(!r){ if(dataReady) showList(false); return; }
+  currentDetail=slug;
+  listView.style.display='none'; detailView.hidden=false;
+  $('detail-loading').hidden=true; $('detail-body').hidden=false;
+  var fig=$('detail-photofig'), noPh=$('detail-nophoto');
+  if(r.photo_url){
+    fig.hidden=false; noPh.hidden=true;
+    var img=$('detail-img'); img.src=r.photo_url; img.alt='Photo of '+r.name;
+    $('detail-credit').textContent=r.photo_credit||'';
+    $('detail-photo-btn').setAttribute('aria-label','View the photo of '+r.name+' full screen');
+    currentPhoto={src:r.photo_url, name:r.name, credit:r.photo_credit||''};
+  } else { fig.hidden=true; noPh.hidden=false; currentPhoto=null; }
+  var area=[r.city, r.region].filter(Boolean).join(' · ');
+  $('detail-meta').innerHTML='<span>'+esc(CAT_LABEL[r._cat])+'</span>'+(area?'<span>'+esc(area)+'</span>':'');
+  $('detail-title').textContent=r.name;
+  var descEl=$('detail-desc');
+  descEl.textContent=r.short_description||'';
+  descEl.style.display=r.short_description?'':'none';
+  var rowsHtml='';
+  if(r.address) rowsHtml+=infoRow('Address','<a href="'+esc(mapsURL(r))+'" target="_blank" rel="noopener">'+esc(r.address)+'</a><span class="info-sub">Tap to open in Apple Maps</span>');
+  if(r.phone){
+    var digits=r.phone.replace(/\D/g,'').replace(/^1(?=\d{10}$)/,'');
+    rowsHtml+=infoRow('Phone','<a href="tel:+1'+esc(digits)+'" aria-label="Call '+esc(r.phone)+'">'+esc(r.phone)+'</a><span class="info-sub">Tap to call</span>');
   }
-  function showLb(){
-    var l = lbGroup[lbIdx]; if(!l) return;
-    lbImg.src = l.photo; lbImg.alt = l.name;
-    lbName.textContent = l.name;
-    lbMeta.textContent = l.area || '';
-    var multi = lbGroup.length > 1;
-    lbPrev.style.display = multi ? '' : 'none';
-    lbNext.style.display = multi ? '' : 'none';
-    lbCount.textContent = multi ? (lbIdx + 1) + ' / ' + lbGroup.length : '';
+  if(r.website_url){
+    var label=r.website_url; try{ label=new URL(r.website_url).hostname.replace(/^www\./,''); }catch(e){}
+    var what = r._cat==='marker' ? 'Marker record at HMdb' : 'Visit website';
+    rowsHtml+=infoRow('Website','<a href="'+esc(r.website_url)+'" target="_blank" rel="noopener">'+esc(label)+'</a><span class="info-sub">'+what+'</span>');
   }
-  function stepLb(d){
-    if(lbGroup.length < 2) return;
-    lbIdx = (lbIdx + d + lbGroup.length) % lbGroup.length;
-    showLb();
+  rowsHtml+=infoRow('Kind', esc(CAT_LABEL[r._cat])+(area?' · '+esc(area):''));
+  $('detail-info').innerHTML=rowsHtml;
+  var dir=$('detail-dir'); dir.href=mapsURL(r); dir.classList.remove('hidden');
+  var web=$('detail-web');
+  if(r.website_url){ web.href=r.website_url; web.classList.remove('hidden'); } else web.classList.add('hidden');
+  renderDetailEvents(slug);
+  document.title=r.name+' — Places of the Gold Country';
+  window.scrollTo(0,0);
+}
+function showList(restore){
+  var wasDetail=currentDetail;
+  currentDetail=null; currentPhoto=null;
+  detailView.hidden=true; listView.style.display='';
+  document.title=LIST_TITLE;
+  if(!restore) return;
+  if(coldDetail && wasDetail){
+    coldDetail=false;
+    var t=document.getElementById('card-'+wasDetail);
+    if(t){ t.scrollIntoView({block:'center'}); t.classList.add('hash-highlight'); setTimeout(function(){ t.classList.remove('hash-highlight'); }, 2600); return; }
   }
-  function closeLightbox(){
-    lightbox.classList.remove('open');
-    lbImg.removeAttribute('src');
-    if(!scrim.classList.contains('open')) document.body.style.overflow = '';
-    if(lbReturn && lbReturn.focus) lbReturn.focus();
+  window.scrollTo(0, savedScrollY);
+}
+function goToDetail(slug){
+  if(!bySlug[slug]) return;
+  if(currentDetail!==slug) savedScrollY=window.scrollY||window.pageYOffset||0;
+  sessionNav=true;
+  var target='#/place/'+encodeURIComponent(slug);
+  if(window.location.hash===target){ showDetail(slug); }
+  else { window.location.hash=target; }
+}
+function goBack(){
+  if(sessionNav){ window.history.back(); }
+  else{
+    var clean=window.location.pathname;
+    try{
+      var sp=new URLSearchParams(window.location.search); sp.delete('place');
+      var rest=sp.toString(); if(rest) clean+='?'+rest;
+    }catch(e){}
+    window.history.pushState(null,'',clean);
+    showList(true);
   }
-  $('lb-x').addEventListener('click', closeLightbox);
-  lbPrev.addEventListener('click', function(){ stepLb(-1); });
-  lbNext.addEventListener('click', function(){ stepLb(1); });
-  lightbox.addEventListener('click', function(e){
-    if(e.target === lightbox || e.target === lbFig) closeLightbox();
-  });
-  var lbTouchX = null;
-  lightbox.addEventListener('touchstart', function(e){ lbTouchX = e.changedTouches[0].clientX; }, { passive: true });
-  lightbox.addEventListener('touchend', function(e){
-    if(lbTouchX === null) return;
-    var dx = e.changedTouches[0].clientX - lbTouchX; lbTouchX = null;
-    if(Math.abs(dx) > 42) stepLb(dx < 0 ? 1 : -1);
-  }, { passive: true });
+}
+$('detail-back').addEventListener('click', goBack);
+$('detail-back-2').addEventListener('click', goBack);
+wireCopy($('detail-copy'), function(){ return currentDetail; });
 
-  /* ---------- Filters UI ---------- */
-  function clearAll(){
-    state.q = ''; state.cat = 'all'; state.town = ''; state.shown = PAGE;
-    $('q').value = ''; $('town').value = '';
-    $('searchbox').classList.remove('has-q');
-    render();
-  }
-  $('clearall').addEventListener('click', clearAll);
+/* ---------- photo viewer with drag-down to dismiss ---------- */
+var viewer=$('viewer'), vStage=$('viewer-stage'), vImg=$('viewer-img'), vCap=$('viewer-cap');
+function openViewer(){
+  if(!currentPhoto) return;
+  vImg.src=currentPhoto.src; vImg.alt='Photo of '+currentPhoto.name;
+  vCap.textContent=currentPhoto.name+(currentPhoto.credit?' — '+currentPhoto.credit:'');
+  vStage.style.transform=''; viewer.style.background='';
+  viewer.hidden=false;
+  document.body.style.overflow='hidden';
+}
+function closeViewer(){ viewer.hidden=true; document.body.style.overflow=''; }
+$('detail-photo-btn').addEventListener('click', openViewer);
+$('viewer-close').addEventListener('click', closeViewer);
+viewer.addEventListener('click', function(e){ if(e.target===viewer) closeViewer(); });
+(function(){
+  var startY=null, dy=0, dragging=false;
+  viewer.addEventListener('pointerdown', function(e){ startY=e.clientY; dy=0; dragging=true; });
+  viewer.addEventListener('pointermove', function(e){
+    if(!dragging||startY===null) return;
+    dy=e.clientY-startY;
+    if(dy>0){ vStage.style.transform='translateY('+dy+'px)'; viewer.style.background='rgba(12,9,6,'+Math.max(.55, .95 - dy/500)+')'; }
+  });
+  function end(){ if(!dragging) return; dragging=false; if(dy>90){ closeViewer(); } vStage.style.transform=''; viewer.style.background=''; startY=null; dy=0; }
+  viewer.addEventListener('pointerup', end);
+  viewer.addEventListener('pointercancel', end);
+})();
+document.addEventListener('keydown', function(e){
+  if(e.key!=='Escape') return;
+  if(!viewer.hidden) closeViewer();
+  else if(currentDetail) goBack();
+});
 
-  var qTimer = null;
-  $('q').addEventListener('input', function(){
-    $('searchbox').classList.toggle('has-q', !!this.value);
-    var v = this.value;
-    clearTimeout(qTimer);
-    qTimer = setTimeout(function(){ state.q = v; state.shown = PAGE; render(); }, 120);
-  });
-  $('clearq').addEventListener('click', function(){
-    $('q').value = ''; $('searchbox').classList.remove('has-q'); state.q = ''; state.shown = PAGE; render(); $('q').focus();
-  });
-  $('town').addEventListener('change', function(){ state.town = this.value; state.shown = PAGE; render(); });
-  Array.prototype.forEach.call(document.querySelectorAll('#cats button'), function(b){
-    b.addEventListener('click', function(){
-      state.cat = b.getAttribute('data-cat'); state.shown = PAGE; render();
-    });
-  });
+/* ---------- controls ---------- */
+qEl.value=state.q;
+var qTimer=null;
+qEl.addEventListener('input', function(){
+  clearTimeout(qTimer);
+  qTimer=setTimeout(function(){ state.q=qEl.value; state.shown=PAGE; saveState(); renderPills(); renderGrid(true); }, 160);
+});
+moreBtn.addEventListener('click', function(){ state.shown+=PAGE; renderGrid(false); });
+window.addEventListener('resize', (function(){ var t; return function(){ clearTimeout(t); t=setTimeout(function(){ if(dataReady && !currentDetail) renderGrid(false); }, 250); }; })());
 
-  /* ---------- Stat cards ---------- */
-  function scrollToTools(){
-    var tb = $('toolbar');
-    if(tb) tb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+/* ---------- boot: route first, then data ---------- */
+var initialRoute=routeSlug();
+if(initialRoute){
+  coldDetail=true;
+  var hasHashRoute=/^#\/place\//.test(window.location.hash||'');
+  var hasQueryRoute=false;
+  try{ hasQueryRoute=!!new URLSearchParams(window.location.search).get('place'); }catch(e){}
+  if(hasQueryRoute && !hasHashRoute){
+    try{ window.history.replaceState(null,'',window.location.pathname+'#/place/'+encodeURIComponent(initialRoute)); }catch(e){}
   }
-  function pulseHit(el){
-    if(!el) return;
-    el.classList.remove('pulse-hit');
-    void el.offsetWidth;
-    el.classList.add('pulse-hit');
-    el.addEventListener('animationend', function h(){
-      el.classList.remove('pulse-hit');
-      el.removeEventListener('animationend', h);
-    });
-  }
-  $('stat-published').addEventListener('click', function(){ clearAll(); scrollToTools(); });
-  $('stat-markers').addEventListener('click', function(){ state.cat = 'markers'; state.shown = PAGE; render(); scrollToTools(); });
-  $('stat-towns').addEventListener('click', function(){
-    scrollToTools();
-    var sel = $('town'); if(sel) sel.focus();
-    var wrap = sel ? (sel.closest('.hostsel') || sel) : null;
-    setTimeout(function(){ pulseHit(wrap); }, 300);
-  });
+  listView.style.display='none'; detailView.hidden=false; $('detail-loading').hidden=false; $('detail-body').hidden=true;
+}
+window.addEventListener('hashchange', function(){
+  var r=routeSlug();
+  if(r && dataReady && bySlug[r]) showDetail(r);
+  else if(r && !dataReady){ coldDetail=true; listView.style.display='none'; detailView.hidden=false; $('detail-loading').hidden=false; $('detail-body').hidden=true; }
+  else showList(true);
+});
 
-  /* ---------- Load ---------- */
-  function skeleton(){
-    var s = '';
-    for(var i = 0; i < 6; i++) s += '<div class="skel pulse"><div class="a"></div><div class="b"></div><div class="c"></div></div>';
-    resultsEl.innerHTML = '<div class="skel-grid" aria-label="Loading locations">' + s + '</div>';
-  }
-  function feedHeaders(){ return { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY }; }
-  function fetchLocPage(off){
-    return fetch(LOC_URL + '&offset=' + off, { cache: 'no-store', headers: feedHeaders() })
-      .then(function(res){ if(!res.ok) throw new Error('feed ' + res.status); return res.json(); });
-  }
-  function loadLocs(){
-    skeleton();
-    $('count-big').textContent = 'Loading the locations database…';
-    $('count-small').textContent = '';
-    fetchLocPage(0).then(function(data){
-      if(data.length === 1000) return fetchLocPage(1000).then(function(d2){ return data.concat(d2); });
-      return data;
-    }).then(function(data){
-      rows = data.map(normalizeLoc);
-      loaded = true;
-      applyEvents();
-      var st = document.querySelectorAll('#stats .stat b');
-      st[0].textContent = rows.length;
-      st[1].textContent = rows.filter(function(l){ return l.cat === 'markers'; }).length;
-      render();
-    }).catch(function(){
-      resultsEl.innerHTML = '<div class="state"><h2>Couldn’t reach the locations database</h2>'
-        + '<p>The live listings didn’t load just now. Check your connection and try again — nothing here is cached or made up.</p>'
-        + '<button class="btn" id="retry" type="button">Try again</button></div>';
-      $('count-big').textContent = 'Locations unavailable right now';
-      var r = $('retry'); if(r) r.addEventListener('click', loadLocs);
-    });
-  }
-  function normalizeEv(r){
-    var start = parseDate(r.start_date), end = parseDate(r.end_date) || start;
-    return {
-      name: r.name || 'Untitled event', start: start, end: end,
-      start_time: r.start_time || null, end_time: r.end_time || null,
-      location: r.location || '', host: (r.host_org || '').trim()
-    };
-  }
-  function isUpcoming(ev){ return ev.end && dayDiff(ev.end, todayLA) >= 0; }
-  function matchLoc(ev, l){
-    var hn = normName(ev.host), el = normName(ev.location), ln = l.nname;
-    if(!ln) return false;
-    if(hn && hn === ln) return true;
-    if(el && el.indexOf(ln) !== -1) return true;
-    if(hn && ln.length >= 8 && (ln.indexOf(hn) === 0 || hn.indexOf(ln) === 0)) return true;
-    return false;
-  }
-  var evRows = null;
-  function applyEvents(){
-    if(!evRows || !rows.length) return;
-    rows.forEach(function(l){
-      l.evs = evRows.filter(function(ev){ return matchLoc(ev, l); });
-    });
-  }
-  function loadEvs(){
-    fetch(EV_URL, { cache: 'no-store', headers: feedHeaders() })
-      .then(function(res){ if(!res.ok) throw new Error('feed ' + res.status); return res.json(); })
-      .then(function(data){
-        evRows = data.map(normalizeEv).filter(function(ev){ return ev.start && isUpcoming(ev); });
-        applyEvents();
-        if(loaded) render();
-      })
-      .catch(function(){ /* locations stand on their own without the events join */ });
-  }
-  loadLocs();
-  loadEvs();
+loadLocations().then(function(all){
+  rows=all;
+  rows.forEach(function(r){
+    r._cat=categoryOf(r); bySlug[r.slug]=r;
+    r._nn=normName(r.name);
+    r._hay=normName([r.name,r.city,r.region,r.address,r.short_description].join(' '));
+  });
+  rows.sort(function(a,b){ return a.name.localeCompare(b.name); });
+  dataReady=true;
+  renderPills();
+  renderGrid(true);
+  var r0=routeSlug();
+  if(r0 && bySlug[r0]){ showDetail(r0); }
+  else if(r0){ showList(false); }
+  loadEvents().then(applyEvents).catch(function(){ eventsLoaded=true; });
+}).catch(function(){
+  grid.innerHTML='<p class="empty">Couldn’t reach the locations database just now — please reload to try again.</p>';
+  countEl.textContent='';
+});
 })();
 </script>
-<script async src="https://visitor-counter.dave-5d7.workers.dev/beacon.js" data-site="gold-country-events"></script>
 </body>
 </html>
