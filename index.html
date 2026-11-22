@@ -380,13 +380,18 @@
     if(diff <= 7) return {t:'This week', hot:false};
     return null;
   }
+  // Canonical town derivation - identical in the public viewer, the Events
+  // Buddy homepage, the prepared API viewer, and the API Worker: the postal
+  // city (", Town, CA") wins; else the first known-towns substring match;
+  // "Mt Aukum" normalizes to "Mount Aukum". Hosts are counted trimmed.
   function townOf(loc){
     if(!loc) return '';
+    var m = loc.match(/,\s*([A-Za-z .']+?),\s*CA\b/);
+    if(m){ var t = m[1].trim(); return t==='Mt Aukum' ? 'Mount Aukum' : t; }
     for(var i=0;i<KNOWN_TOWNS.length;i++){
       if(loc.indexOf(KNOWN_TOWNS[i]) !== -1) return KNOWN_TOWNS[i]==='Mt Aukum' ? 'Mount Aukum' : KNOWN_TOWNS[i];
     }
-    var m = loc.match(/,\s*([A-Z][A-Za-z.' ]+?),\s*CA/);
-    return m ? m[1].trim() : '';
+    return '';
   }
   function normalize(r){
     var start = parseDate(r.start_date), end = parseDate(r.end_date) || start;
