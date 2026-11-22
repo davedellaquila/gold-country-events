@@ -425,11 +425,13 @@
   function normName(s){
     return String(s || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
   }
+  var WINERY_NAMES = { 'lusso della terra': 1 }; /* wineries whose names carry no winery word */
   function categoryOf(name, website){
     if(website && /hmdb\.org/i.test(website)) return 'markers';
     var n = String(name || '').toLowerCase();
+    if(WINERY_NAMES[n]) return 'wineries';
     if(/(winery|vineyard|cellars|wines|estate|vino|château|chateau)/.test(n)) return 'wineries';
-    if(/(inn|pub|restaurant|cafe|café|grill|bakery|brew|kitchen|tavern|saloon|hotel|motel|lodge|bed and breakfast|b&b)/.test(n)) return 'food';
+    if(/(inn|pub|restaurant|cafe|café|grill|bakery|brew|kitchen|tavern|saloon|hotel|motel|lodge|bed and breakfast|b&b|diner|burger|eats|frosty|deli|coffee|ranch)/.test(n)) return 'food';
     return 'sights';
   }
   function normalizeLoc(r){
@@ -741,6 +743,7 @@
     }).then(function(data){
       rows = data.map(normalizeLoc);
       loaded = true;
+      applyEvents();
       var st = document.querySelectorAll('#stats .stat b');
       st[0].textContent = rows.length;
       st[1].textContent = rows.filter(function(l){ return l.cat === 'markers'; }).length;
@@ -770,14 +773,19 @@
     if(hn && ln.length >= 8 && (ln.indexOf(hn) === 0 || hn.indexOf(ln) === 0)) return true;
     return false;
   }
+  var evRows = null;
+  function applyEvents(){
+    if(!evRows || !rows.length) return;
+    rows.forEach(function(l){
+      l.evs = evRows.filter(function(ev){ return matchLoc(ev, l); });
+    });
+  }
   function loadEvs(){
     fetch(EV_URL, { cache: 'no-store', headers: feedHeaders() })
       .then(function(res){ if(!res.ok) throw new Error('feed ' + res.status); return res.json(); })
       .then(function(data){
-        var evs = data.map(normalizeEv).filter(function(ev){ return ev.start && isUpcoming(ev); });
-        rows.forEach(function(l){
-          l.evs = evs.filter(function(ev){ return matchLoc(ev, l); });
-        });
+        evRows = data.map(normalizeEv).filter(function(ev){ return ev.start && isUpcoming(ev); });
+        applyEvents();
         if(loaded) render();
       })
       .catch(function(){ /* locations stand on their own without the events join */ });
