@@ -4,7 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<link rel="icon" href="data:," />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+<link rel="manifest" href="site.webmanifest" />
 <title>Gold Country Events</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,6 +59,7 @@
     background:linear-gradient(160deg,var(--bg2),var(--bg) 72%);
     border-bottom:1px solid var(--line)}
   .hero-inner{max-width:1180px;margin:0 auto;padding:44px 20px 30px}
+  .hero-icon{width:54px;height:54px;border-radius:13px;vertical-align:-13px;margin-right:14px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
   .hero-rule{display:flex;align-items:center;gap:12px;color:var(--accent-ink);
     font-size:12.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
   .hero-rule::after{content:"";height:1px;flex:1;background:var(--line2)}
@@ -256,7 +262,7 @@
 <header class="hero">
   <div class="hero-inner">
     <div class="hero-rule">Amador County · California Gold Country</div>
-    <h1>Gold Country <em>Events</em></h1>
+    <h1><img class="hero-icon" src="favicon-192.png" alt="" aria-hidden="true">Gold Country <em>Events</em></h1>
     <p class="hero-sub">Markets, music, wine weekends, and small-town gatherings across Fiddletown, Plymouth, Volcano, Sutter Creek, and the Shenandoah Valley — every published event, in one place.</p>
     <p class="hero-credit">From the events database curated by <a href="https://davedellaquila.github.io/buddy-system/events-buddy/" target="_blank" rel="noopener">Events Buddy</a> — the same listings the Fiddletown Gazette and morning briefings draw from.</p>
     <div class="stats" id="stats" aria-live="polite">
