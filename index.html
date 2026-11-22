@@ -716,7 +716,7 @@
     skeleton();
     $('count-big').textContent = 'Loading the events database…';
     $('count-small').textContent = '';
-    fetch(FEED_URL, { headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY } })
+    fetch(FEED_URL, { cache: 'no-store', headers: { 'apikey': ANON_KEY, 'Authorization': 'Bearer ' + ANON_KEY } })
       .then(function(res){ if(!res.ok) throw new Error('feed ' + res.status); return res.json(); })
       .then(function(data){
         rows = data.map(normalize).filter(function(ev){ return ev.start; });
