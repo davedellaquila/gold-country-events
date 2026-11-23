@@ -625,9 +625,53 @@
 
   /* ---------- Detail sheet ---------- */
   var scrim = $('scrim'), sheet = $('sheet'), lastFocus = null;
-  function openDetail(ev){
+
+  /* ---------- Per-event deep links (#/event/<slug>) ---------- */
+  var SHARE_BASE = 'https://events.fiddletowngazette.com/';
+  var BASE_TITLE = document.title;
+  var sheetSlug = null, routePushed = false;
+  function parseRouteSlug(){
+    var m = (window.location.hash || '').match(/^#\/event\/(.+)$/);
+    if(m){ try{ return decodeURIComponent(m[1]); }catch(e){ return m[1]; } }
+    try{ var q = new URLSearchParams(window.location.search).get('event'); if(q) return q; }catch(e){}
+    return null;
+  }
+  function eventURL(slug){
+    return SHARE_BASE + '?event=' + encodeURIComponent(slug) + '#/event/' + encodeURIComponent(slug);
+  }
+  function cleanURL(){
+    try{
+      var u = new URL(window.location.href);
+      u.hash = ''; u.searchParams.delete('event');
+      return u.toString();
+    }catch(e){ return SHARE_BASE; }
+  }
+  function findBySlug(slug){
+    for(var i=0;i<rows.length;i++) if(rows[i].slug === slug) return rows[i];
+    return null;
+  }
+  function onRouteChange(){
+    var s = parseRouteSlug();
+    if(s){
+      if(s === sheetSlug) return;
+      var ev = findBySlug(s);
+      if(ev) openDetail(ev, true);
+    } else if(sheetSlug){
+      routePushed = false;
+      finalizeClose();
+    }
+  }
+  window.addEventListener('popstate', onRouteChange);
+  window.addEventListener('hashchange', onRouteChange);
+  function openDetail(ev, fromRoute){
     if(!ev) return;
     lastFocus = document.activeElement;
+    sheetSlug = ev.slug || null;
+    if(ev.slug){
+      if(fromRoute){ routePushed = false; try{ history.replaceState(null,'',eventURL(ev.slug)); }catch(e){} }
+      else if(parseRouteSlug() !== ev.slug){ routePushed = true; try{ history.pushState(null,'',eventURL(ev.slug)); }catch(e){ routePushed = false; } }
+      document.title = ev.name + ' \u00b7 Gold Country Events';
+    }
     var rel = relTag(ev);
     var media = ev.image
       ? '<img src="'+esc(ev.image)+'" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"><div class="noimg" style="display:none">'+ICON_CAL+'</div>'
@@ -648,10 +692,18 @@
       + '<div class="sheet-actions">'
       + (ev.website ? '<a class="btn" href="'+esc(ev.website)+'" target="_blank" rel="noopener">Visit event site</a>' : '')
       + (ev.location ? '<a class="btn ghost" href="'+maps+'" target="_blank" rel="noopener">Directions</a>' : '')
+      + (ev.slug ? '<button class="btn ghost" id="sheet-copy" type="button">\U0001F517 Copy link</button>' : '')
       + '</div></div>';
     scrim.classList.add('open');
     document.body.style.overflow = 'hidden';
     $('sheet-x').addEventListener('click', closeDetail);
+    var cpBtn = $('sheet-copy');
+    if(cpBtn) cpBtn.addEventListener('click', function(){
+      var url = eventURL(ev.slug);
+      function done(){ cpBtn.textContent = '\u2713 Link copied'; setTimeout(function(){ cpBtn.textContent = '\U0001F517 Copy link'; }, 1600); }
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
+      else { var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta); done(); }
+    });
     var simg = sheet.querySelector('.sheet-media img');
     if(simg){
       simg.title = 'View photo full-screen';
@@ -660,8 +712,15 @@
     $('sheet-x').focus();
   }
   function closeDetail(){
+    if(routePushed){ routePushed = false; try{ history.back(); }catch(e){} finalizeClose(); return; }
+    if(parseRouteSlug()){ try{ history.replaceState(null,'',cleanURL()); }catch(e){} }
+    finalizeClose();
+  }
+  function finalizeClose(){
     scrim.classList.remove('open');
     document.body.style.overflow = '';
+    sheetSlug = null;
+    document.title = BASE_TITLE;
     if(lastFocus && lastFocus.focus) lastFocus.focus();
   }
   scrim.addEventListener('click', function(e){ if(e.target===scrim) closeDetail(); });
@@ -871,6 +930,8 @@
         st[0].textContent = rows.length;
         st[1].textContent = rows.filter(isUpcoming).length;
         buildTowns(); buildHosts(); render();
+        var rs = parseRouteSlug();
+        if(rs){ var ev0 = findBySlug(rs); if(ev0) openDetail(ev0, true); }
       })
       .catch(function(){
         resultsEl.innerHTML = '<div class="state"><h2>Couldn’t reach the events database</h2>'
