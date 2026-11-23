@@ -692,7 +692,7 @@
       + '<div class="sheet-actions">'
       + (ev.website ? '<a class="btn" href="'+esc(ev.website)+'" target="_blank" rel="noopener">Visit event site</a>' : '')
       + (ev.location ? '<a class="btn ghost" href="'+maps+'" target="_blank" rel="noopener">Directions</a>' : '')
-      + (ev.slug ? '<button class="btn ghost" id="sheet-copy" type="button">\U0001F517 Copy link</button>' : '')
+      + (ev.slug ? '<button class="btn ghost" id="sheet-copy" type="button">🔗 Copy link</button>' : '')
       + '</div></div>';
     scrim.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -700,7 +700,7 @@
     var cpBtn = $('sheet-copy');
     if(cpBtn) cpBtn.addEventListener('click', function(){
       var url = eventURL(ev.slug);
-      function done(){ cpBtn.textContent = '\u2713 Link copied'; setTimeout(function(){ cpBtn.textContent = '\U0001F517 Copy link'; }, 1600); }
+      function done(){ cpBtn.textContent = '\u2713 Link copied'; setTimeout(function(){ cpBtn.textContent = '🔗 Copy link'; }, 1600); }
       if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, done);
       else { var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta); done(); }
     });
