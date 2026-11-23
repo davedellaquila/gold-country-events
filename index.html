@@ -817,6 +817,10 @@
     towns = Object.keys(allCounts).sort(function(a,b){ return allCounts[b]-allCounts[a] || a.localeCompare(b); });
     var counts = {};
     facetRows('town').forEach(function(ev){ if(ev.town) counts[ev.town]=(counts[ev.town]||0)+1; });
+    /* Hide towns with no events under the other filters (Dave, Nov 23,
+       2026); if the selected town drops to zero, clear the selection
+       gracefully rather than leaving an unexplained empty result. */
+    if(state.town && !counts[state.town]) state.town = '';
     var el = $('towns');
     el.innerHTML = '<span class="towns-label">Towns</span>';
     var all = document.createElement('button');
@@ -825,6 +829,7 @@
     all.addEventListener('click', function(){ state.town=''; state.shown=PAGE; buildTowns(); render(); });
     el.appendChild(all);
     towns.forEach(function(t){
+      if(!counts[t]) return;
       var c = document.createElement('button');
       c.type='button'; c.className='chip';
       c.innerHTML = esc(t) + (counts[t] ? '<span class="n">'+counts[t]+'</span>' : '');
