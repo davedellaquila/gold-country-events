@@ -124,6 +124,8 @@
     border-radius:999px;padding:8px 15px;min-height:40px;font-weight:600;font-size:14px;cursor:pointer}
   .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
   @media (prefers-color-scheme: dark){.seg button[aria-pressed="true"]{color:#241a08}}
+  .seg button .n{color:var(--muted);font-weight:600;margin-left:4px;font-size:12.5px}
+  .seg button[aria-pressed="true"] .n{color:inherit;opacity:.65}
 
   .towns{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;align-items:center}
   .towns-label{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:2px}
@@ -469,10 +471,10 @@
   }
   /* Rows passing the current filters; `except` names one facet (town/host)
      whose own selection is ignored, so facet counts stay meaningful. */
-  function facetRows(except){
+  function facetRows(except, skipWhen){
     var q = state.q.trim().toLowerCase();
     return rows.filter(function(ev){
-      if(!passesWhen(ev)) return false;
+      if(!skipWhen && !passesWhen(ev)) return false;
       if(except!=='town' && state.town && ev.town !== state.town) return false;
       if(except!=='host' && state.host && ev.host !== state.host) return false;
       if(q){
@@ -483,6 +485,28 @@
     });
   }
 
+
+  /* Date-pill counts (Dave, Nov 23, 2026): each pill's count respects the
+     current search / town / host filters but ignores the date selection
+     itself - the same facet treatment the town pills get. A zero count
+     renders no number, again like the town pills. */
+  var WHEN_LABELS = { upcoming:'Upcoming', next7:'Next 7 days', next30:'Next 30 days', all:'All dates', past:'Past events' };
+  function buildWhens(){
+    var counts = { upcoming:0, next7:0, next30:0, all:0, past:0 };
+    facetRows(null, true).forEach(function(ev){
+      counts.all++;
+      if(isUpcoming(ev)){
+        counts.upcoming++;
+        var d = dayDiff(ev.start, todayLA);
+        if(d <= 7) counts.next7++;
+        if(d <= 30) counts.next30++;
+      } else counts.past++;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(b){
+      var w = b.getAttribute('data-when');
+      b.innerHTML = esc(WHEN_LABELS[w] || w) + (counts[w] ? '<span class="n">' + counts[w] + '</span>' : '');
+    });
+  }
 
   /* Holiday events (Dave, Nov 22, 2026): within each day, holiday events
      list first, then everything by start time. Curatorial matcher on the
@@ -553,7 +577,7 @@
   var currentList = [];
   function render(){
     if(!loaded) return;
-    buildTowns(); buildHosts();
+    buildTowns(); buildHosts(); buildWhens();
     var out = filtered();
     currentList = out;
     var upcomingTotal = rows.filter(isUpcoming).length;
