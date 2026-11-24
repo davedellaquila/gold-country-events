@@ -375,7 +375,7 @@
 (function(){
   "use strict";
   var FEED_URL = 'https://ydftcebaftngcdjvxrgl.supabase.co/rest/v1/events'
-    + '?select=name,slug,start_date,start_time,end_date,end_time,location,host_org,website_url,image_url,short_description'
+    + '?select=name,slug,start_date,start_time,end_date,end_time,location,host_org,website_url,image_url,short_description,source_url,source_label'
     + '&status=eq.published&order=start_date.asc&limit=1000';
   var ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlkZnRjZWJhZnRuZ2NkanZ4cmdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1NDA5NDcsImV4cCI6MjA3NjExNjk0N30.8AlcsUMJSxBlua-ehaGLAn69bbORoMBdjM--MSxxXF0';
 
@@ -458,6 +458,7 @@
       start_time:r.start_time||null, end_time:r.end_time||null,
       location:r.location||'', host:(r.host_org||'').trim(),
       website:r.website_url||'', image:r.image_url||'',
+      source_url:r.source_url||'', source_label:r.source_label||'',
       desc:r.short_description||'', town:townOf(r.location||'')
     };
   }
@@ -541,6 +542,7 @@
   var ICON_PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>';
   var ICON_CLK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
   var ICON_USR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-3.6 4.2-5.4 8-5.4s6.8 1.8 8 5.4"/></svg>';
+  var ICON_SRC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 10a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
 
   function cardHTML(ev, i){
     var rel = relTag(ev);
@@ -711,6 +713,7 @@
       + '<div class="fact">'+ICON_CAL+'<span><b>'+esc(dateRange(ev))+'</b></span></div>'
       + (ev.location ? '<div class="fact">'+ICON_PIN+'<span>'+esc(ev.location)+' &nbsp;<a href="'+maps+'" target="_blank" rel="noopener">Open in Apple Maps</a></span></div>' : '')
       + (ev.host ? '<div class="fact">'+ICON_USR+'<span>Hosted by <b>'+esc(ev.host)+'</b></span></div>' : '')
+      + (ev.source_url ? '<div class="fact">'+ICON_SRC+'<span>Source: <a href="'+esc(ev.source_url)+'" target="_blank" rel="noopener">'+esc(ev.source_label||'Event source')+' ↗</a></span></div>' : (ev.source_label ? '<div class="fact">'+ICON_SRC+'<span>Source: '+esc(ev.source_label)+'</span></div>' : ''))
       + '</div>'
       + (ev.desc ? '<p class="full">'+esc(ev.desc)+'</p>' : '')
       + '<div class="sheet-actions">'
