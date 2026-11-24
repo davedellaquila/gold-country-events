@@ -197,7 +197,7 @@ function esc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</
 function normName(s){ return (s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,' ').trim(); }
 
 /* ---------- categories (client-side derivation; the live table has no category column) ---------- */
-var WINERY_NAMES = {'lusso della terra':1};
+var WINERY_NAMES = {'lusso della terra':1, 'chateau davell':1, 'home of the zin man':1, 'cantiga wineworks':1};
 function categoryOf(r){
   var host = '';
   try{ host = r.website_url ? new URL(r.website_url).hostname.replace(/^www\./,'') : ''; }catch(e){}
