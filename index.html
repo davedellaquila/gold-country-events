@@ -110,6 +110,17 @@
     width:32px;height:32px;min-height:32px;border:1px solid var(--line2);border-radius:50%;background:var(--surface);
     color:var(--muted);font-size:15px;cursor:pointer;display:none;line-height:1;padding:0}
   .search.has-q .clear-q{display:block}
+  /* Filter collapse (Dave, Nov 24 2026): scrolling collapses the toolbar to one summary row */
+  .filtersum{display:none;width:100%;align-items:center;gap:10px;background:var(--surface);
+    border:1px solid var(--line2);border-radius:999px;padding:9px 8px 9px 16px;font-size:14px;
+    color:var(--ink);cursor:pointer;text-align:left;min-height:44px}
+  .toolbar.collapsed .filtersum{display:flex}
+  .toolbar.collapsed>*:not(.filtersum){display:none!important}
+  .filtersum-text{flex:1 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+  .filtersum-cta{flex:none;display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--rust);
+    border:1px solid var(--line2);border-radius:999px;padding:5px 12px;background:var(--bg)}
+  .filtersum-n{background:var(--rust);color:#fff;border-radius:999px;padding:0 7px;font-size:12px;line-height:18px}
+  .toolbar.collapsed{position:sticky;top:0}
   .search .clear-q:hover,.search .clear-q:active{background:var(--line2);color:var(--ink)}
   .mappref{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;align-items:center}
   .mappref-label{font-size:13px;font-weight:700;color:var(--muted)}
@@ -322,6 +333,10 @@
 
 <div class="wrap">
   <div class="toolbar" id="toolbar">
+    <button type="button" class="filtersum" id="filtersum" aria-expanded="true" aria-label="Show all filters">
+      <span class="filtersum-text" id="filtersum-text">Upcoming</span>
+      <span class="filtersum-cta">Filters <span class="filtersum-n" id="filtersum-n" hidden>0</span> <span aria-hidden="true">&#9662;</span></span>
+    </button>
     <div class="toolbar-row">
       <div class="search" id="searchbox">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
@@ -716,7 +731,60 @@
   function syncStickyTop(){
     var tb = $('toolbar');
     if(tb) document.documentElement.style.setProperty('--stickytop', tb.offsetHeight + 'px');
+    renderFilterSummary();
   }
+
+  /* ---------- Filter collapse on scroll (Dave, Nov 24 2026) ----------
+     Scrolling down collapses the toolbar to a single summary row that still
+     shows what's active; tapping it expands the full filters in place;
+     scrolling back to the top restores them. State is never touched. */
+  var WHEN_LABELS = {upcoming: 'Upcoming', next7: 'Next 7 days', next30: 'Next 30 days', all: 'All dates', past: 'Past events'};
+  var fsManualOpen = false, fsExpandY = 0, fsTicking = false;
+  function activeFilterCount(){
+    var n = 0;
+    if(state.q) n++;
+    if(state.town) n++;
+    if(state.host) n++;
+    if(state.when !== 'upcoming') n++;
+    if(state.savedOnly) n++;
+    return n;
+  }
+  function renderFilterSummary(){
+    var t = $('filtersum-text'), badge = $('filtersum-n');
+    if(!t) return;
+    var parts = [WHEN_LABELS[state.when] || 'Upcoming'];
+    if(state.town) parts.push(state.town);
+    if(state.host) parts.push(state.host);
+    if(state.q) parts.push('\u201C' + state.q + '\u201D');
+    if(state.savedOnly) parts.push('\u2605 Saved');
+    t.textContent = parts.join(' \u00B7 ');
+    var n = activeFilterCount();
+    if(badge){ badge.hidden = n === 0; badge.textContent = n; }
+  }
+  function setFiltersCollapsed(on){
+    var tb = $('toolbar'); if(!tb) return;
+    tb.classList.toggle('collapsed', on);
+    $('filtersum').setAttribute('aria-expanded', String(!on));
+    syncStickyTop();
+  }
+  function onFilterScroll(){
+    if(fsTicking) return;
+    fsTicking = true;
+    requestAnimationFrame(function(){
+      fsTicking = false;
+      var tb = $('toolbar'); if(!tb) return;
+      var y = window.scrollY || 0, collapsed = tb.classList.contains('collapsed');
+      if(y < 40){ fsManualOpen = false; if(collapsed) setFiltersCollapsed(false); }
+      else if(!collapsed && !fsManualOpen && y > 160) setFiltersCollapsed(true);
+      else if(!collapsed && fsManualOpen && y > fsExpandY + 160){ fsManualOpen = false; setFiltersCollapsed(true); }
+    });
+  }
+  window.addEventListener('scroll', onFilterScroll, {passive: true});
+  $('filtersum').addEventListener('click', function(){
+    fsManualOpen = true;
+    fsExpandY = window.scrollY || 0;
+    setFiltersCollapsed(false);
+  });
 
   /* ---------- Detail sheet ---------- */
   var scrim = $('scrim'), sheet = $('sheet'), lastFocus = null;
