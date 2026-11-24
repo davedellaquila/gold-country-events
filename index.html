@@ -740,7 +740,7 @@
      shows what's active; tapping it expands the full filters in place;
      scrolling back to the top restores them. State is never touched. */
   var WHEN_LABELS = {upcoming: 'Upcoming', next7: 'Next 7 days', next30: 'Next 30 days', all: 'All dates', past: 'Past events'};
-  var fsManualOpen = false, fsExpandY = 0, fsTicking = false;
+  var fsManualOpen = false, fsExpandY = 0, fsExpandAt = 0, fsTicking = false;
   function activeFilterCount(){
     var n = 0;
     if(state.q) n++;
@@ -778,12 +778,17 @@
       var y = window.scrollY || 0, collapsed = tb.classList.contains('collapsed');
       if(y < 40){ fsManualOpen = false; var tb2 = $('toolbar'); if(tb2) tb2.classList.remove('opensticky'); if(collapsed) setFiltersCollapsed(false); }
       else if(!collapsed && !fsManualOpen && y > 160) setFiltersCollapsed(true);
-      else if(!collapsed && fsManualOpen && y > fsExpandY + 240){ fsManualOpen = false; setFiltersCollapsed(true); }
+      else if(!collapsed && fsManualOpen){
+        if(Date.now() - fsExpandAt < 900) fsExpandY = y; /* expansion still settling (anchoring) — track the baseline, never re-collapse yet */
+        else if(y > fsExpandY + 240){ fsManualOpen = false; setFiltersCollapsed(true); }
+      }
     });
   }
   window.addEventListener('scroll', onFilterScroll, {passive: true});
   $('filtersum').addEventListener('click', function(){
     fsManualOpen = true;
+    fsExpandAt = Date.now();
+    fsExpandY = window.scrollY || 0;
     setFiltersCollapsed(false);
     $('toolbar').classList.add('opensticky');
     /* Baseline AFTER the expansion settles: growing the toolbar makes the
