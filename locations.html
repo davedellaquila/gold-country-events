@@ -353,7 +353,7 @@ function renderPills(){
   });
   pillsEl.innerHTML=html;
   pillsEl.querySelectorAll('button[data-cat]').forEach(function(b){
-    b.addEventListener('click', function(){ state.cat=b.getAttribute('data-cat'); state.shown=PAGE; saveState(); renderPills(); renderGrid(true); });
+    b.addEventListener('click', function(){ state.cat=b.getAttribute('data-cat'); state.shown=PAGE; saveState(); renderPills(); renderGrid(true); scrollToResults(); });
   });
   renderTowns();
 }
@@ -381,7 +381,7 @@ function renderTowns(){
   }
   townsEl.innerHTML=html;
   townsEl.querySelectorAll('button[data-town]').forEach(function(b){
-    b.addEventListener('click', function(){ state.town=b.getAttribute('data-town'); state.shown=PAGE; saveState(); renderTowns(); renderGrid(true); });
+    b.addEventListener('click', function(){ state.town=b.getAttribute('data-town'); state.shown=PAGE; saveState(); renderTowns(); renderGrid(true); scrollToResults(); });
   });
   var tg=townsEl.querySelector('button[data-towns-toggle]');
   if(tg) tg.addEventListener('click', function(){ townsOpen=!townsOpen; renderTowns(); });
@@ -409,6 +409,13 @@ function cardHTML(r){
   h+='<div class="card-actions"><button class="details-btn" type="button" data-goto="'+esc(r.slug)+'">Details →</button><button class="copy-btn" type="button" data-copy="'+esc(r.slug)+'">🔗 <span>Copy link</span></button></div>';
   h+='</div></article>';
   return h;
+}
+function scrollToResults(){
+  var controls=document.querySelector('.controls');
+  var sticky=controls && window.getComputedStyle(controls).position==='sticky';
+  var offset=sticky ? controls.getBoundingClientRect().height : 0;
+  var y=grid.getBoundingClientRect().top + window.scrollY - offset - 8;
+  window.scrollTo(0, Math.max(0, y));
 }
 function renderGrid(reset){
   if(!dataReady) return;
@@ -582,7 +589,7 @@ qEl.value=state.q;
 var qTimer=null;
 qEl.addEventListener('input', function(){
   clearTimeout(qTimer);
-  qTimer=setTimeout(function(){ state.q=qEl.value; state.shown=PAGE; saveState(); renderPills(); renderGrid(true); }, 160);
+  qTimer=setTimeout(function(){ state.q=qEl.value; state.shown=PAGE; saveState(); renderPills(); renderGrid(true); scrollToResults(); }, 160);
 });
 moreBtn.addEventListener('click', function(){ state.shown+=PAGE; renderGrid(false); });
 window.addEventListener('resize', (function(){ var t; return function(){ clearTimeout(t); t=setTimeout(function(){ if(dataReady && !currentDetail) renderGrid(false); }, 250); }; })());
