@@ -42,6 +42,7 @@ h1{font-family:"Playfair Display",Georgia,serif;font-size:clamp(38px,6vw,64px);l
 .filters button:focus-visible,.search:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .towns{margin-top:8px}
 .towns button{font-size:12.5px;min-height:34px;padding:6px 11px}
+.towns button.towns-toggle{border-style:dashed;font-weight:600}
 .count{font-family:Inter,sans-serif;font-size:13px;color:var(--muted);margin-top:10px}
 .count:empty{margin:0}
 .grid{margin-top:18px}
@@ -356,17 +357,34 @@ function renderPills(){
   });
   renderTowns();
 }
+var townsOpen=false;
+var TOWN_CAP=24;
 function renderTowns(){
   var counts=facetTowns();
   if(state.town && !counts[state.town]){ state.town=''; saveState(); }
+  var names=Object.keys(counts).sort();
+  var many=names.length>TOWN_CAP;
+  var shown=names;
+  if(many && !townsOpen){
+    var byCount=names.slice().sort(function(a,b){ return counts[b]-counts[a] || (a<b?-1:1); });
+    var keep={};
+    byCount.slice(0,TOWN_CAP).forEach(function(t){ keep[t]=1; });
+    if(state.town) keep[state.town]=1;
+    shown=names.filter(function(t){ return keep[t]; });
+  }
   var html='<button type="button" data-town="" class="'+(state.town===''?'active':'')+'" aria-pressed="'+(state.town==='')+'">All towns</button>';
-  Object.keys(counts).sort().forEach(function(t){
+  shown.forEach(function(t){
     html+='<button type="button" data-town="'+esc(t)+'" class="'+(state.town===t?'active':'')+'" aria-pressed="'+(state.town===t)+'">'+esc(t)+' ('+counts[t]+')</button>';
   });
+  if(many){
+    html+='<button type="button" data-towns-toggle="1" class="towns-toggle" aria-expanded="'+townsOpen+'">'+(townsOpen?'Show fewer towns':'+ '+(names.length-shown.length)+' more towns')+'</button>';
+  }
   townsEl.innerHTML=html;
   townsEl.querySelectorAll('button[data-town]').forEach(function(b){
     b.addEventListener('click', function(){ state.town=b.getAttribute('data-town'); state.shown=PAGE; saveState(); renderTowns(); renderGrid(true); });
   });
+  var tg=townsEl.querySelector('button[data-towns-toggle]');
+  if(tg) tg.addEventListener('click', function(){ townsOpen=!townsOpen; renderTowns(); });
 }
 function mapsURL(r){
   if(r.latitude!=null && r.longitude!=null) return 'https://maps.apple.com/?ll='+r.latitude+','+r.longitude+'&q='+encodeURIComponent(r.name);
