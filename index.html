@@ -117,6 +117,11 @@
     border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:600;cursor:pointer;min-height:36px}
   .mappref button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
   @media (prefers-color-scheme: dark){.mappref button[aria-pressed="true"]{color:#241a08}}
+  .save-star{position:absolute;top:10px;right:10px;z-index:3;width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,253,247,.94);border:1px solid var(--line2);color:var(--muted);font-size:20px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(60,35,0,.12)}
+  .save-star[aria-pressed="true"]{color:var(--accent);background:var(--accent-soft);border-color:var(--accent)}
+  .row .save-star{position:static;flex:none;width:36px;height:36px;margin-left:6px;box-shadow:none}
+  @media (prefers-color-scheme: dark){.save-star{background:rgba(30,25,20,.92)}}
+  .savedseg{margin-top:8px}
   .hostsel{flex:0 1 230px;max-width:100%}
   .hostsel select{width:100%;padding:10px 12px;border:1px solid var(--line2);border-radius:999px;
     background:var(--surface);color:var(--ink);font-size:15px}
@@ -342,6 +347,7 @@
       <button type="button" data-when="all" aria-pressed="false">All dates</button>
       <button type="button" data-when="past" aria-pressed="false">Past events</button>
     </div>
+    <div class="seg savedseg" role="group" aria-label="Saved events"><button type="button" id="saved-pill" aria-pressed="false">★ Saved</button></div>
     <div class="towns" id="towns"><span class="towns-label">Towns</span></div>
     <div class="mappref" role="group" aria-label="Preferred map app"><span class="mappref-label">Maps:</span><button type="button" data-mappref="google" aria-pressed="true">Google Maps</button><button type="button" data-mappref="apple" aria-pressed="false">Apple Maps</button><button type="button" data-mappref="osm" aria-pressed="false">OpenStreetMap</button></div>
   </div>
@@ -390,7 +396,7 @@
   var KNOWN_TOWNS = ['Shenandoah Valley','Sutter Creek','Amador City','Pine Grove','Valley Springs','Angels Camp','Grass Valley','Mount Aukum','Mt Aukum','Fair Play','Fiddletown','Plymouth','Volcano','Jackson','Drytown','Ione','Sacramento','San Jose','Napa','Danville','Santa Cruz','Monterey','Morgan Hill','Stockton','Placerville','Auburn','Sonora','Murphys','Pleasanton'];
 
   var PAGE = 60;
-  var state = { q:'', town:'', host:'', when:'upcoming', view:'grid', shown: PAGE };
+  var state = { q:'', town:'', host:'', when:'upcoming', view:'grid', shown: PAGE, savedOnly:false };
   /* Filter state persists on-device across visits (Burgers guide pattern,
      Nov 24, 2026) — restored here, saved on every render(). */
   var EV_LS_KEY = 'gcev.filters.v1';
@@ -402,9 +408,23 @@
       if(typeof savedEv.host === 'string') state.host = savedEv.host;
       if(['upcoming','next7','next30','all','past'].indexOf(savedEv.when) !== -1) state.when = savedEv.when;
       if(savedEv.view === 'list' || savedEv.view === 'grid') state.view = savedEv.view;
+      if(savedEv.savedOnly) state.savedOnly = true;
     }
   }catch(e){}
-  function saveEvState(){ try{ localStorage.setItem(EV_LS_KEY, JSON.stringify({q:state.q, town:state.town, host:state.host, when:state.when, view:state.view})); }catch(e){} }
+  function saveEvState(){ try{ localStorage.setItem(EV_LS_KEY, JSON.stringify({q:state.q, town:state.town, host:state.host, when:state.when, view:state.view, savedOnly:state.savedOnly})); }catch(e){} }
+  /* Saved events — the star (Dave's ruling, Nov 24, 2026): "plan to go."
+     On-device only, keyed by slug; a past event keeps its star. */
+  var SAVED_KEY = 'gcev.saved.v1';
+  function loadSaved(){ try{ var v = JSON.parse(localStorage.getItem(SAVED_KEY) || '{}'); return (v && typeof v === 'object') ? v : {}; }catch(e){ return {}; } }
+  var savedSet = loadSaved();
+  function saveSaved(){ try{ localStorage.setItem(SAVED_KEY, JSON.stringify(savedSet)); }catch(e){} }
+  function toggleSaved(slug){ if(!slug) return; if(savedSet[slug]) delete savedSet[slug]; else savedSet[slug] = true; saveSaved(); }
+  function savedCount(){ var n = 0; rows.forEach(function(ev){ if(ev.slug && savedSet[ev.slug]) n++; }); return n; }
+  function starHTML(ev, inRow){
+    if(!ev.slug) return '';
+    var on = !!savedSet[ev.slug];
+    return '<span class="save-star'+(inRow?' inrow':'')+'" data-save="'+esc(ev.slug)+'" role="button" aria-pressed="'+(on?'true':'false')+'" aria-label="'+(on?'Saved — tap to unsave':'Save this event')+'" title="'+(on?'Saved — tap to unsave':'Save this event')+'">'+(on?'★':'☆')+'</span>';
+  }
   /* Preferred map app — the Burgers guide pattern (Nov 24, 2026); the storage
      key is SHARED with the guide and the Places page, so one device-saved
      choice drives every map link on all three. */
@@ -509,7 +529,10 @@
   function facetRows(except, skipWhen){
     var q = state.q.trim().toLowerCase();
     return rows.filter(function(ev){
-      if(!skipWhen && !passesWhen(ev)) return false;
+      if(state.savedOnly && !(ev.slug && savedSet[ev.slug])) return false;
+      /* With the Saved pill on, the date range steps aside: the plan list
+         shows every saved event, including ones already past (Dave, Nov 24). */
+      if(!skipWhen && !state.savedOnly && !passesWhen(ev)) return false;
       if(except!=='town' && state.town && ev.town !== state.town) return false;
       if(except!=='host' && state.host && ev.host !== state.host) return false;
       if(q){
@@ -570,7 +593,7 @@
     else out.sort(function(a,b){ return (a.start - b.start) || dayOrder(a, b); });
     return out;
   }
-  function anyFilter(){ return !!(state.q || state.town || state.host || state.when!=='upcoming'); }
+  function anyFilter(){ return !!(state.q || state.town || state.host || state.when!=='upcoming' || state.savedOnly); }
 
   var ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
   var SHEET_SHARE_HTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:15px;height:15px;vertical-align:-2px"><path d="M12 3v13"/><path d="M7 8l5-5 5 5"/><path d="M5 13v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg> Share';
@@ -588,6 +611,7 @@
       + '<span class="card-media">'+media
       + '<span class="datebadge"><span class="dow">'+DOWS[ev.start.getDay()]+'</span><span class="dnum">'+ev.start.getDate()+'</span></span>'
       + (rel ? '<span class="reltag'+(rel.hot?'':' soon')+'">'+esc(rel.t)+'</span>' : '')
+      + starHTML(ev, false)
       + '</span>'
       + '<span class="card-body"><h3>'+esc(ev.name)+'</h3>'
       + '<span class="meta">'+ICON_CLK+'<span>'+esc(fmtDay(ev.start))+' · '+esc(timeRange(ev))+'</span></span>'
@@ -607,6 +631,7 @@
       + '<span class="row-main"><h3>'+esc(ev.name)+'</h3><span class="rmeta">'+meta+'</span>'
       + (ev.website ? '<span class="src-link" data-url="'+esc(ev.website)+'" title="Open the source page for this event">More info ↗</span>' : '')
       + '</span>'
+      + starHTML(ev, true)
       + '<span class="rtime">'+esc(fmtTime(ev.start_time)||'All day')+(ev.end_time?'<small>to '+esc(fmtTime(ev.end_time))+'</small>':'')+'</span>'
       + '</button>';
   }
@@ -616,6 +641,8 @@
     if(!loaded) return;
     saveEvState();
     buildTowns(); buildHosts(); buildWhens();
+    var sp = $('saved-pill');
+    if(sp){ var sn = savedCount(); sp.innerHTML = '★ Saved' + (sn ? '<span class="n">' + sn + '</span>' : ''); sp.setAttribute('aria-pressed', state.savedOnly ? 'true' : 'false'); }
     var out = filtered();
     currentList = out;
     var upcomingTotal = rows.filter(isUpcoming).length;
@@ -667,6 +694,12 @@
       if(hc) hc.addEventListener('click', function(e){
         e.stopPropagation();
         setHost(hc.getAttribute('data-host'));
+      });
+      var st = el.querySelector('.save-star');
+      if(st) st.addEventListener('click', function(e){
+        e.stopPropagation();
+        toggleSaved(st.getAttribute('data-save'));
+        render();
       });
       var ph = el.querySelector('img');
       if(ph){
@@ -756,6 +789,7 @@
       + (ev.website ? '<a class="btn" href="'+esc(ev.website)+'" target="_blank" rel="noopener">Visit event site</a>' : '')
       + (ev.location ? '<a class="btn ghost" href="'+maps+'" target="_blank" rel="noopener">Directions</a>' : '')
       + (ev.slug ? '<button class="btn ghost" id="sheet-copy" type="button">'+SHEET_SHARE_HTML+'</button>' : '')
+      + (ev.slug ? '<button class="btn ghost" id="sheet-save" type="button">'+(savedSet[ev.slug] ? '★ Saved' : '☆ Save')+'</button>' : '')
       + '</div></div>';
     scrim.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -774,6 +808,12 @@
         navigator.share({ title: ev.name + ' \u00b7 Gold Country Events', text: ev.name + ' \u2014 from the Gold Country Events calendar', url: url })
           .catch(function(err){ if(err && err.name !== 'AbortError') copyFallback(); });
       } else copyFallback();
+    });
+    var svBtn = $('sheet-save');
+    if(svBtn) svBtn.addEventListener('click', function(){
+      toggleSaved(ev.slug);
+      svBtn.textContent = savedSet[ev.slug] ? '★ Saved' : '☆ Save';
+      render();
     });
     var simg = sheet.querySelector('.sheet-media img');
     if(simg){
@@ -905,7 +945,7 @@
     if(st[3]) st[3].textContent = hosts.length;
   }
   function clearAll(){
-    state.q=''; state.town=''; state.host=''; state.when='upcoming'; state.shown=PAGE;
+    state.q=''; state.town=''; state.host=''; state.when='upcoming'; state.shown=PAGE; state.savedOnly=false;
     $('q').value=''; $('host').value='';
     $('searchbox').classList.remove('has-q');
     Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(b){
@@ -1002,6 +1042,10 @@
     b.addEventListener('click', function(){ try{ localStorage.setItem(MAP_PREF_KEY, b.getAttribute('data-mappref')); }catch(e){} applyMapPref(); });
   });
   applyMapPref();
+  var savedPill = $('saved-pill');
+  if(savedPill) savedPill.addEventListener('click', function(){
+    state.savedOnly = !state.savedOnly; state.shown = PAGE; render();
+  });
   window.addEventListener('resize', syncStickyTop);
 
   /* ---------- Load ---------- */
