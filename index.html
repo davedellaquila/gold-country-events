@@ -1101,9 +1101,11 @@
   $('host').addEventListener('change', function(){ state.host=this.value; state.shown=PAGE; render(); });
   Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(b){
     b.addEventListener('click', function(){
-      state.when=b.getAttribute('data-when'); state.shown=PAGE;
-      Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(x){ x.setAttribute('aria-pressed','false'); });
-      b.setAttribute('aria-pressed','true'); render();
+      var w = b.getAttribute('data-when');
+      state.when = (state.when === w && w !== 'upcoming') ? 'upcoming' : w;
+      state.shown = PAGE;
+      Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(x){ x.setAttribute('aria-pressed', String(x.getAttribute('data-when') === state.when)); });
+      render();
     });
   });
   /* ---------- Stat cards (Dave, Nov 21) ---------- */
@@ -1115,7 +1117,7 @@
     render();
   }
   function setHost(h){
-    state.host = h || '';
+    state.host = (h && state.host === h) ? '' : (h || '');
     state.shown = PAGE;
     var sel = $('host'); if(sel) sel.value = state.host;
     render();
