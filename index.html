@@ -121,6 +121,14 @@
     border:1px solid var(--line2);border-radius:999px;padding:5px 12px;background:var(--bg)}
   .filtersum-n{background:var(--rust);color:#fff;border-radius:999px;padding:0 7px;font-size:12px;line-height:18px}
   .toolbar.collapsed{position:sticky;top:0}
+  .toolbar.fs-anim{overflow:hidden;transition:height .3s ease;position:sticky;top:0;z-index:40}
+  .toolbar.fs-anim .filtersum{display:flex;position:absolute;top:14px;left:0;right:0;z-index:2}
+  .filtersum.fs-sum-in{opacity:0;transition:opacity .28s ease}
+  .filtersum.fs-sum-out{transition:opacity .15s ease}
+  @media (prefers-reduced-motion: reduce){
+    .toolbar.fs-anim{transition:none}
+    .filtersum.fs-sum-in,.filtersum.fs-sum-out{transition:none}
+  }
   .toolbar.opensticky{position:sticky;top:0;z-index:40}
   .search .clear-q:hover,.search .clear-q:active{background:var(--line2);color:var(--ink)}
   .mappref{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;align-items:center}
@@ -762,12 +770,58 @@
     var n = activeFilterCount();
     if(badge){ badge.hidden = n === 0; badge.textContent = n; }
   }
-  function setFiltersCollapsed(on){
+  var fsAnimId = 0, fsAnimating = false, fsAnimTarget = null;
+  function fsReducedMotion(){ try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){ return false; } }
+  function finishFsState(on){
     var tb = $('toolbar'); if(!tb) return;
+    fsAnimId++; fsAnimating = false; fsAnimTarget = null;
+    tb.classList.remove('fs-anim');
+    tb.style.height = '';
+    var sum = $('filtersum');
+    sum.classList.remove('fs-sum-in'); sum.classList.remove('fs-sum-out');
+    sum.style.opacity = '';
     tb.classList.toggle('collapsed', on);
     if(on) tb.classList.remove('opensticky');
-    $('filtersum').setAttribute('aria-expanded', String(!on));
     syncStickyTop();
+  }
+  function setFiltersCollapsed(on){
+    var tb = $('toolbar'); if(!tb) return;
+    var sum = $('filtersum');
+    sum.setAttribute('aria-expanded', String(!on));
+    if(fsAnimating && fsAnimTarget === on) return;
+    if(!fsAnimating && tb.classList.contains('collapsed') === on){ syncStickyTop(); return; }
+    if(on) tb.classList.remove('opensticky');
+    if(fsReducedMotion() || !tb.offsetHeight){ finishFsState(on); return; }
+    var myId = ++fsAnimId;
+    fsAnimating = true; fsAnimTarget = on;
+    var cs = window.getComputedStyle(tb);
+    var padV = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+    if(on){
+      var startH = tb.offsetHeight;
+      tb.classList.add('fs-anim');
+      void tb.offsetHeight;
+      var targetH = sum.offsetHeight + padV;
+      tb.style.height = startH + 'px';
+      void tb.offsetHeight;
+      sum.classList.add('fs-sum-in');
+      requestAnimationFrame(function(){ sum.style.opacity = '1'; });
+      tb.style.height = targetH + 'px';
+    } else {
+      var fromH = tb.offsetHeight;
+      tb.classList.remove('collapsed');
+      tb.style.height = '';
+      var fullH = tb.offsetHeight;
+      tb.classList.add('fs-anim');
+      tb.style.height = fromH + 'px';
+      void tb.offsetHeight;
+      sum.classList.add('fs-sum-out');
+      requestAnimationFrame(function(){ sum.style.opacity = '0'; });
+      tb.style.height = fullH + 'px';
+    }
+    var done = function(){ if(myId === fsAnimId) finishFsState(on); };
+    var h = function(e){ if(e.propertyName === 'height'){ tb.removeEventListener('transitionend', h); done(); } };
+    tb.addEventListener('transitionend', h);
+    setTimeout(done, 450);
   }
   function onFilterScroll(){
     if(fsTicking) return;
