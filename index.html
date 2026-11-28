@@ -1046,7 +1046,7 @@
     var all = document.createElement('button');
     all.type='button'; all.className='chip'; all.textContent='All towns';
     all.setAttribute('aria-pressed', state.town==='' ? 'true':'false');
-    all.addEventListener('click', function(){ state.town=''; state.shown=PAGE; buildTowns(); render(); });
+    all.addEventListener('click', function(){ state.town=''; state.shown=PAGE; buildTowns(); render(); scrollToResults(); });
     el.appendChild(all);
     towns.forEach(function(t){
       if(!counts[t]) return;
@@ -1055,7 +1055,7 @@
       c.innerHTML = esc(t) + (counts[t] ? '<span class="n">'+counts[t]+'</span>' : '');
       c.setAttribute('aria-pressed', state.town===t ? 'true':'false');
       c.addEventListener('click', function(){
-        state.town = state.town===t ? '' : t; state.shown=PAGE; buildTowns(); render();
+        state.town = state.town===t ? '' : t; state.shown=PAGE; buildTowns(); render(); scrollToResults();
       });
       el.appendChild(c);
     });
@@ -1084,7 +1084,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(b){
       b.setAttribute('aria-pressed', b.getAttribute('data-when')==='upcoming' ? 'true':'false');
     });
-    buildTowns(); render();
+    buildTowns(); render(); scrollToResults();
   }
   $('clearall').addEventListener('click', clearAll);
 
@@ -1098,14 +1098,14 @@
   $('clearq').addEventListener('click', function(){
     $('q').value=''; $('searchbox').classList.remove('has-q'); state.q=''; state.shown=PAGE; render(); $('q').focus();
   });
-  $('host').addEventListener('change', function(){ state.host=this.value; state.shown=PAGE; render(); });
+  $('host').addEventListener('change', function(){ state.host=this.value; state.shown=PAGE; render(); scrollToResults(); });
   Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(b){
     b.addEventListener('click', function(){
       var w = b.getAttribute('data-when');
       state.when = (state.when === w && w !== 'upcoming') ? 'upcoming' : w;
       state.shown = PAGE;
       Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(x){ x.setAttribute('aria-pressed', String(x.getAttribute('data-when') === state.when)); });
-      render();
+      render(); scrollToResults();
     });
   });
   /* ---------- Stat cards (Dave, Nov 21) ---------- */
@@ -1114,17 +1114,38 @@
     Array.prototype.forEach.call(document.querySelectorAll('#when button'), function(x){
       x.setAttribute('aria-pressed', x.getAttribute('data-when')===w ? 'true' : 'false');
     });
-    render();
+    render(); scrollToResults();
   }
   function setHost(h){
     state.host = (h && state.host === h) ? '' : (h || '');
     state.shown = PAGE;
     var sel = $('host'); if(sel) sel.value = state.host;
-    render();
+    render(); scrollToResults();
   }
   function scrollToTools(){
     var tb = $('toolbar');
     if(tb) tb.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  function scrollToResults(){
+    var tb = $('toolbar');
+    /* Filter-change reset (Dave, Nov 27, 2026): a filter change lands the
+       reader on the FIRST item of the new result set, directly under the
+       collapsed sticky filter row — settle the collapse instantly, then
+       measure and scroll once the settled layout is in place. Search typing
+       and the search clear button deliberately never call this. */
+    if(tb && (window.scrollY||0) > 40 && !tb.classList.contains('collapsed')){
+      fsManualOpen = false;
+      finishFsState(true);
+      var sum = $('filtersum'); if(sum) sum.setAttribute('aria-expanded','false');
+      renderFilterSummary();
+    }
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      var main = $('results'); if(!main) return;
+      var sticky = tb && window.getComputedStyle(tb).position==='sticky';
+      var offset = sticky ? tb.getBoundingClientRect().height : 0;
+      var y = main.getBoundingClientRect().top + window.scrollY - offset - 8;
+      window.scrollTo(0, Math.max(0, y));
+    }); });
   }
   function pulseHit(el){
     if(!el) return;
